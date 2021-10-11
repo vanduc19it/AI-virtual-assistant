@@ -133,9 +133,9 @@ def send_email(text):
         # mail = smtplib.SMTP('smtp.gmail.com', 587)
         # mail.ehlo()
         # mail.starttls()
-        # mail.login('luongngochungcntt@gmail.com', 'hung23081997')
-        # mail.sendmail('luongngochungcntt@gmail.com',
-        #               'hungdhv97@gmail.com', content.encode('utf-8'))
+        # mail.login('cvduc.19it1@vku.udn.vn', '11111111')
+        # mail.sendmail('cvduc.19it1@vku.udn.vn',
+        #               'pvphung.19it1@vku.udn.vn', content.encode('utf-8'))
         # mail.close()
         speak('Email của bạn vùa được gửi. Bạn check lại email nhé hihi.')      
         time.sleep(4)  
@@ -230,7 +230,7 @@ def tell_me_about():
         speak('Cảm ơn bạn đã lắng nghe!!!')
         time.sleep(3)
     except:
-        speak("Bot không định nghĩa được thuật ngữ của bạn. Xin mời bạn nói lại")
+        speak("Mình không định nghĩa được thuật ngữ của bạn. Xin mời bạn nói lại")
         time.sleep(5)
 
 def help_me():
