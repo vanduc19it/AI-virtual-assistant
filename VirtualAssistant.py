@@ -24,7 +24,7 @@ wikipedia.set_lang('vi')
 language = 'vi'
 path = ChromeDriverManager().install()
 
-def speak(text):    
+def speak(text):
     print("Bot: {}".format(text))
     tts = gTTS(text=text, lang=language, slow=False)
     tts.save("sound.mp3")
@@ -54,6 +54,7 @@ def get_text():
         text = get_audio()
         if text:
             return text.lower()
+        
         elif i < 2:
             speak("Mình không nghe rõ. Bạn nói lại được không!")
             time.sleep(3)
@@ -90,7 +91,7 @@ def open_application(text):
     elif "word" in text:
         speak("Mở Microsoft Word")
         time.sleep(2)
-        os.system("C:\ProgramData\Microsoft\Windows\Start Menu\Programs")
+        os.startfile('Desktop\\Google Chrome')
     elif "excel" in text:
         speak("Mở Microsoft Excel")
         time.sleep(2)
@@ -103,7 +104,7 @@ def open_website(text):
     reg_ex = re.search('mở (.+)', text)
     if reg_ex:
         domain = reg_ex.group(1)
-        url = 'https://www.' + domain
+        url = 'https://www.' + domain + '.com'
         webbrowser.open(url)
         speak("Trang web bạn yêu cầu đã được mở.")
         time.sleep(3)
@@ -139,7 +140,7 @@ def send_email(text):
         speak('Email của bạn vùa được gửi. Bạn check lại email nhé hihi.')      
         time.sleep(4)  
     else:
-        speak('Bot không hiểu bạn muốn gửi email cho ai. Bạn nói lại được không?')
+        speak('Mình không hiểu bạn muốn gửi email cho ai. Bạn nói lại được không?')
         time.sleep(5)
 
 def current_weather():
@@ -233,7 +234,7 @@ def tell_me_about():
         time.sleep(5)
 
 def help_me():
-    speak("""Bot có thể giúp bạn thực hiện các câu lệnh sau đây:
+    speak("""Mình có thể giúp bạn thực hiện các câu lệnh sau đây:
     1. Chào hỏi
     2. Hiển thị giờ
     3. Mở website, application
@@ -246,24 +247,26 @@ def help_me():
     10. Kể bạn biết về thế giới """)
     time.sleep(27)
 
+
+#đọc báo
 def read_news():
     speak("Chức năng còn đang xây dựng. Vui lòng chọn chức năng khác")
     time.sleep(5)
-    
+
+
+#AI - brain
 def assistant():
-    speak("Xin chào, bạn tên là gì nhỉ?")
+    speak("Chào bạn, bạn muốn tôi gọi bạn là gì nhỉ?")
     time.sleep(2)
     name = get_text()
     if name:
-        speak("Chào bạn {}".format(name))
-        time.sleep(2)
-        speak("Bạn cần Bot Alex có thể giúp gì ạ?")
+        speak("Ok {}".format(name) + ". Tôi có thể giúp gì cho bạn?")
         time.sleep(3)
         while True:
-            text = get_text()
+            text = get_text().lower()
             if not text:
                 break
-            elif "dừng" in text or "good bye" in text or "tạm biệt" in text or "chào robot" in text or "ngủ thôi" in text:
+            elif "dừng" in text or "tạm biệt" in text or "chào robot" in text or "ngủ thôi" in text:
                 stop()
                 break
             elif "có thể làm gì" in text:
@@ -293,8 +296,12 @@ def assistant():
                 read_news()
             elif "định nghĩa" in text:
                 tell_me_about()
+            elif "open video" in text:
+              meme =r"C:\Users\acer\Videos\hahaa\hahaa.mp4"
+              os.startfile(meme)
             else:
                 speak("Bạn cần Bot giúp gì ạ?")
                 time.sleep(2)
+###
 
 assistant()
