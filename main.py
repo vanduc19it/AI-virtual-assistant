@@ -1,12 +1,24 @@
 from tkinter import *
 import cv2
 import PIL.Image, PIL.ImageTk
+import playsound
 import pyttsx3
 import datetime
 import speech_recognition as sr
 import wikipedia
 import webbrowser
 import os
+import json
+import re
+import ctypes
+import urllib
+import urllib.request as urllib2
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
+from time import strftime
+from gtts import gTTS
+from youtube_search import YoutubeSearch
 import random
 import smtplib
 import roman
@@ -19,7 +31,7 @@ numbers = {'hundred':100, 'thousand':1000, 'lakh':100000}
 a = {'name':'your email'}
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[0].id)
+engine.setProperty('voice', voices[1].id)
 
 window = Tk()
 
@@ -37,40 +49,40 @@ def sendemail(to, content):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
-    server.login('email id', 'password') # email id - use any email id whose security/privacy is off
+    server.login('email id', 'password') 
     server.sendmail('email id', to, content)
     server.close()
 
 def wishme():
     hour = int(datetime.datetime.now().hour)
     if hour >= 0 and hour <= 12:
-        var.set("Good Morning Name") #Name - your Name
+        var.set("Good morning sir !") 
         window.update()
-        speak("Good Morning Name!")
+        speak("Chào buổi sáng bạn Đức. Chúc bạn một ngày tốt lành !")
     elif hour >= 12 and hour <= 18:
-        var.set("Good Afternoon Name!")
+        var.set("Good afternoon sir !")
         window.update()
-        speak("Good Afternoon Name!")
+        speak("Chào buổi chiều bạn Đức. Bạn đã dự định gì cho chiều nay chưa !")
     else:
-        var.set("Good Evening Name")
+        var.set("Good night sir !")
         window.update()
-        speak("Good Evening Name!")
-    speak("Myself BotName! How may I help you sir") #BotName - Give a name to your assistant
+        speak("Chào buổi tối bạn đức. Bạn đã ăn tối chưa nhỉ !")
+    speak("Tôi là trợ lí ảo. Tôi có thể giúp gì cho bạn") 
 
 def takeCommand():
     r = sr.Recognizer()
     with sr.Microphone() as source:
         var.set("Listening...")
         window.update()
-        print("Listening...")
+        print("Trợ lí ảo: Listening...")
         r.pause_threshold = 1
         r.energy_threshold = 400
         audio = r.listen(source)
     try:
         var.set("Recognizing...")
         window.update()
-        print("Recognizing")
-        query = r.recognize_google(audio, language='en-in')
+        print("Trợ lí ảo: Recognizing...")
+        query = r.recognize_google(audio, language='vi-VN')
     except Exception as e:
         return "None"
     var1.set(query)
@@ -91,11 +103,11 @@ def play():
             btn2['state'] = 'normal'
             btn0['state'] = 'normal'
             window.update()
-            speak("Bye sir")
+            speak("Tạm biệt bạn. Hẹn gặp lại bạn sau !")
             break
 
         elif 'wikipedia' in query:
-            if 'open wikipedia' in query:
+            if 'mở wikipedia' in query:
                 webbrowser.open('wikipedia.com')
             else:
                 try:
@@ -107,14 +119,14 @@ def play():
                     window.update()
                     speak(results)
                 except Exception as e:
-                    var.set('sorry sir could not find any results')
+                    var.set('Xin lỗi bạn, tôi không tìm thấy bất kì kết quả nào !')
                     window.update()
-                    speak('sorry sir could not find any results')
+                    speak('Xin lỗi bạn, tôi không tìm thấy bất kì kết quả nào !')
 
-        elif 'open youtube' in query:
-            var.set('opening Youtube')
+        elif 'mở youtube' in query:
+            var.set('Đang mở Youtube... !')
             window.update()
-            speak('opening Youtube')
+            speak('Chờ một chút, mình đang mở Youtube')
             webbrowser.open("youtube.com")
 
         elif 'open course error' in query:
@@ -123,24 +135,24 @@ def play():
             speak('opening course era')
             webbrowser.open("coursera.com")
 
-        elif 'open google' in query:
-            var.set('opening google')
+        elif 'mở google' in query:
+            var.set('Đang mở Google... !')
             window.update()
-            speak('opening google')
+            speak('Chờ một chút, mình đang mở google')
             webbrowser.open("google.com")
 
-        elif 'hello' in query:
-            var.set('Hello Sir')
+        elif 'chào bạn' in query:
+            var.set('Chào bạn nha. Tôi có thể giúp gì cho bạn !')
             window.update()
-            speak("Hello Sir")
+            speak("Chào bạn nha. Tôi có thể giúp gì cho bạn !")
 			
-        elif 'open stackoverflow' in query:
-            var.set('opening stackoverflow')
+        elif 'mở stackoverflow' in query:
+            var.set('Đang mở Stackoverflow... !')
             window.update()
-            speak('opening stackoverflow')
+            speak('Chờ một chút, mình đang mở stackoverflow cho bạn đây !')
             webbrowser.open('stackoverflow.com')
 
-        elif ('play music' in query) or ('change music' in query):
+        elif ('nghe nhạc' in query) or ('change music' in query):
             var.set('Here are your favorites')
             window.update()
             speak('Here are your favorites')
@@ -149,54 +161,54 @@ def play():
             n = random.randint(0,27)
             os.startfile(os.path.join(music_dir, songs[n]))
 
-        elif 'the time' in query:
+        elif 'giờ' in query:
             strtime = datetime.datetime.now().strftime("%H:%M:%S")
-            var.set("Sir the time is %s" % strtime)
+            var.set("Bây giờ là %s" % strtime)
             window.update()
-            speak("Sir the time is %s" %strtime)
+            speak("Bây giờ là %s" %strtime)
 
-        elif 'the date' in query:
+        elif 'ngày' in query:
             strdate = datetime.datetime.today().strftime("%d %m %y")
-            var.set("Sir today's date is %s" %strdate)
+            var.set("Hôm nay là ngày %s" %strdate)
             window.update()
-            speak("Sir today's date is %s" %strdate) 
+            speak("Hôm nay là ngày %s" %strdate) 
 
-        elif 'thank you' in query:
-            var.set("Welcome Sir")
+        elif 'thank you' in query or 'cảm ơn' in query:
+            var.set("Mình rất hân hạnh !!!")
             window.update()
-            speak("Welcome Sir")
+            speak("Mình rất hân hạnh khi được phục vụ cho bạn. Có việc gì cứ nói mình giúp cho nhé !! ")
 
         elif 'can you do for me' in query:
             var.set('I can do multiple tasks for you sir. tell me whatever you want to perform sir')
             window.update()
             speak('I can do multiple tasks for you sir. tell me whatever you want to perform sir')
 
-        elif 'old are you' in query:
-            var.set("I am a little baby sir")
+        elif 'tuổi' in query:
+            var.set("Tôi năm nay hơn 70 tuổi rồi...")
             window.update()
-            speak("I am a little baby sir")
+            speak("Tôi năm nay hơn 70 tuổi rồi mà tôi chưa bao giờ thấy cái trường hợp nào như này cả !")
 
         elif 'open media player' in query:
             var.set("opening VLC media Player")
             window.update()
             speak("opening V L C media player")
-            path = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" #Enter the correct Path according to your system
+            path = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" 
             os.startfile(path)
 
-        elif 'your name' in query:
-            var.set("Myself Jarvis Sir")
+        elif 'tên' in query:
+            var.set("Tên của tôi là Jarvis thưa ngài")
             window.update()
-            speak('myself Jarvis sir')
+            speak('Tên của tôi là Jarvis thưa ngài')
 
-        elif 'who creates you' in query:
-            var.set('My Creator is Mr. Mridul Gupta')
+        elif 'tạo ra bạn' in query:
+            var.set('Đó là bạn đức đẹp trai vip pro nha !')
             window.update()
-            speak('My Creator is Mr. Mridul Gupta')
+            speak('Đó là bạn đức đẹp trai vip pro nha !')
 
-        elif 'say hello' in query:
-            var.set('Hello Everyone! My self Jarvis')
+        elif 'nói xin chào' in query:
+            var.set('Xin chào tất cả mọi người. Mình tên là Jarvis')
             window.update()
-            speak('Hello Everyone! My self Jarvis')
+            speak('Xin chào tất cả mọi người. Mình tên là Jarvis')
 
         elif 'open pycharm' in query:
             var.set("Openong Pycharm")
@@ -205,11 +217,11 @@ def play():
             path = "C:\\Program Files\\JetBrains\\PyCharm Community Edition 2018.3.2\\bin\\pycharm64.exe" #Enter the correct Path according to your system
             os.startfile(path)
 
-        elif 'open chrome' in query:
-            var.set("Opening Google Chrome")
+        elif 'mở chrome' in query:
+            var.set("Đang mở Google Chrome...")
             window.update()
-            speak("Opening Google Chrome")
-            path = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" #Enter the correct Path according to your system
+            speak("chờ một chút, mình đang mở Google Chrome")
+            path = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
             os.startfile(path)
 
         elif 'email to me' in query:
@@ -220,33 +232,27 @@ def play():
                 content = takeCommand()
                 to = a['name']
                 sendemail(to, content)
-                var.set('Email has been sent!')
+                var.set('Email đã được gửi !')
                 window.update()
-                speak('Email has been sent!')
+                speak('Email đã được gửi !')
 
             except Exception as e:
                 print(e)
-                var.set("Sorry Sir! I was not able to send this email")
+                var.set("Xin lỗi bạn! Tôi không thể gửi email này !")
                 window.update()
-                speak('Sorry Sir! I was not able to send this email')
+                speak('Xin lỗi bạn! Tôi không thể gửi email này')
 		
-        elif "open python" in query:
+        elif "mở python" in query:
             var.set("Opening Python Ide")
             window.update()
             speak('opening python Ide')
-            os.startfile('C:\\Users\\mridu\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Python 3.7\\IDLE (Python 3.7 64-bit)') #Enter the correct Path according to your system
-
-        elif 'open code blocks' in query:
-            var.set('Opening Codeblocks')
-            window.update()
-            speak('opening Codeblocks')
-            os.startfile("C:\\Program Files (x86)\\CodeBlocks\\codeblocks.exe") #Enter the correct Path according to your system
+            os.startfile('C:\\Users\\mridu\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Python 3.7\\IDLE (Python 3.7 64-bit)') 
 
         elif 'open anaconda' in query:
             var.set('Opening Anaconda')
             window.update()
             speak('opening anaconda')
-            os.startfile("C:\\Users\\mridu\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Anaconda3 (64-bit)\\Anaconda Navigator") #Enter the correct Path according to your system
+            os.startfile("C:\\Users\\mridu\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Anaconda3 (64-bit)\\Anaconda Navigator") 
 
         elif 'calculation' in query:
             sum = 0
@@ -276,7 +282,7 @@ def play():
       
            
 
-        elif 'click photo' in query:
+        elif 'chụp ảnh' in query:
             stream = cv2.VideoCapture(0)
             grabbed, frame = stream.read()
             if grabbed:
@@ -284,7 +290,7 @@ def play():
                 cv2.imwrite('pic.jpg',frame)
             stream.release()
 
-        elif 'record video' in query:
+        elif 'quay video' in query:
             cap = cv2.VideoCapture(0)
             out = cv2.VideoWriter('output.avi', -1, 20.0, (640,480))
             while(cap.isOpened()):
