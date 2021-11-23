@@ -259,6 +259,14 @@ def play():
             path = "C:\\WINDOWS\\System32\\cmd.exe"
             os.startfile(path)
         
+        elif "tìm kiếm" in query or 'search google' in query:
+            var.set("Bạn muốn tìm kiếm gì ?")
+            window.update()
+            speak("Bạn muốn tìm kiếm gì ?")
+            search= takeCommand().lower()
+            url = f"https://google.com/search?q={search}"
+            webbrowser.get().open(url)
+            speak(f'OK. {search} trên google đây nhé ')
         
         elif 'email to me' in query:
             try:
