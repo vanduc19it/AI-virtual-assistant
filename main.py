@@ -97,8 +97,8 @@ def play():
     while True:
         btn1.configure(bg = 'orange')
         query = takeCommand().lower()
-        if 'exit' in query:
-            var.set("Bye sir")
+        if 'tạm biệt' in query:
+            var.set("Tạm biệt nhé !")
             btn1.configure(bg = '#5C85FB')
             btn2['state'] = 'normal'
             btn0['state'] = 'normal'
@@ -129,11 +129,11 @@ def play():
             speak('Chờ một chút, mình đang mở Youtube')
             webbrowser.open("youtube.com")
 
-        elif 'open course error' in query:
-            var.set('opening course era')
+        elif 'mở facebook' in query:
+            var.set('Đang mở Facebook... !')
             window.update()
-            speak('opening course era')
-            webbrowser.open("coursera.com")
+            speak('Chờ một chút, mình đang mở Facebook')
+            webbrowser.open("facebook.com")
 
         elif 'mở google' in query:
             var.set('Đang mở Google... !')
@@ -156,7 +156,7 @@ def play():
             var.set('Here are your favorites')
             window.update()
             speak('Here are your favorites')
-            music_dir = 'D:\My Music\Favourites' # Enter the Path of Music Library
+            music_dir = 'D:\My Music\Favourites' 
             songs = os.listdir(music_dir)
             n = random.randint(0,27)
             os.startfile(os.path.join(music_dir, songs[n]))
@@ -214,16 +214,52 @@ def play():
             var.set("Openong Pycharm")
             window.update()
             speak("Opening Pycharm")
-            path = "C:\\Program Files\\JetBrains\\PyCharm Community Edition 2018.3.2\\bin\\pycharm64.exe" #Enter the correct Path according to your system
+            path = "C:\\Program Files\\JetBrains\\PyCharm Community Edition 2018.3.2\\bin\\pycharm64.exe" 
             os.startfile(path)
 
-        elif 'mở chrome' in query:
+        elif 'mở chrome' in query or 'open chrome' in query:
             var.set("Đang mở Google Chrome...")
             window.update()
             speak("chờ một chút, mình đang mở Google Chrome")
             path = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
             os.startfile(path)
-
+            
+        elif 'mở word' in query or 'open word' in query or 'mở microsoft word' in query or 'open microsoft word' in query:
+            var.set("Đang mở Microsoft Word...")
+            window.update()
+            speak("chờ một chút, mình đang mở Microsoft Word")
+            path = "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE"
+            os.startfile(path)
+            
+        elif 'mở powerpoint' in query or 'open powerpoint' in query or 'mở microsoft powerpoint' in query or 'open microsoft powerpoint' in query:
+            var.set("Đang mở Microsoft Powpoint...")
+            window.update()
+            speak("chờ một chút, mình đang mở Microsoft Powpoint")
+            path = "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE"
+            os.startfile(path)
+        
+        elif 'mở excel' in query or 'open excel' in query or 'mở microsoft excel' in query or 'open microsoft excel' in query:
+            var.set("Đang mở Microsoft Excel...")
+            window.update()
+            speak("chờ một chút, mình đang mở Microsoft Excel")
+            path = "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE"
+            os.startfile(path)
+            
+        elif 'mở notepad' in query or 'open notepad' in query:
+            var.set("Đang mở Notepad...")
+            window.update()
+            speak("chờ một chút, mình đang mở Notepad")
+            path = "C:\\WINDOWS\\System32\\notepad.exe"
+            os.startfile(path)
+            
+        elif 'mở cmd' in query or 'open cmd' in query:
+            var.set("Đang mở cmd...")
+            window.update()
+            speak("chờ một chút, mình đang mở cmd")
+            path = "C:\\WINDOWS\\System32\\cmd.exe"
+            os.startfile(path)
+        
+        
         elif 'email to me' in query:
             try:
                 var.set("What should I say")
