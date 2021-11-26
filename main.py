@@ -7,6 +7,8 @@ import datetime
 import speech_recognition as sr
 import wikipedia
 import webbrowser
+import requests
+import time
 import os
 import json
 import re
@@ -25,7 +27,6 @@ import roman
 from PIL import Image
 
 
-from tkinter.filedialog import askopenfilename
 
 
 numbers = {'hundred':100, 'thousand':1000, 'lakh':100000}
@@ -53,13 +54,39 @@ def sendemail(to, content):
     server.login('email id', 'password') 
     server.sendmail('email id', to, content)
     server.close()
+    
+def send_email(text):
+    speak("Bạn gửi email cho ai vậy nhỉ ?")
+    recipient = takeCommand()
+    if "Đức" in recipient:
+        speak("Nói cho tôi nội dung email bạn muốn gửi ! ... >")
+        content = takeCommand()
+        mail = smtplib.SMTP("smtp.gmail.com", 587)
+        mail.ehlo()
+        mail.starttls()
+        mail.login("vanduc19it@gmail.com", "vanduc190401")
+        mail.sendmail("vanduc19it@gmail.com",
+                      "cvduc.19it1@vku.udn.vn", str(content).encode("utf-8"))
+        mail.close()
+        speak("Email của bạn đã được gửi. Bạn vui lòng kiểm tra lại giúp !  >")
+    else:
+        speak("Tôi không hiểu bạn muốn gửi email cho ai  ...")
 
 def wishme():
-    
-
-    Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-    filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
-    print(filename)
+    hour = int(datetime.datetime.now().hour)
+    if hour >= 0 and hour <= 12:
+        var.set("Good morning sir !") 
+        window.update()
+        speak("Chào buổi sáng bạn Đức. Chúc bạn một ngày tốt lành !")
+    elif hour >= 12 and hour <= 18:
+        var.set("Good afternoon sir !")
+        window.update()
+        speak("Chào buổi chiều bạn Đức. Bạn đã dự định gì cho chiều nay chưa !")
+    else:
+        var.set("Good night sir !")
+        window.update()
+        speak("Chào buổi tối bạn đức. Bạn đã ăn tối chưa nhỉ !")
+    speak("Tôi là trợ lí ảo. Tôi có thể giúp gì cho bạn") 
 
 def takeCommand():
     r = sr.Recognizer()
@@ -81,11 +108,104 @@ def takeCommand():
     window.update()
     return query
 
-def openWeb(nameWeb,url):
-    var.set('Đang mở '+ nameWeb + '... !')
-    window.update()
-    speak('Chờ một chút, mình đang mở '+ nameWeb)
-    webbrowser.open(url)
+def current_weather():
+    speak("Bạn muốn xem thời tiết ở đâu ạ.")
+    # Đường dẫn trang web để lấy dữ liệu về thời tiết
+    ow_url = "http://api.openweathermap.org/data/2.5/weather?"
+    # lưu tên thành phố vào biến city
+    city = takeCommand()
+    # nếu biến city != 0 và = False thì để đấy ko xử lí gì cả
+    if not city:
+        pass
+    # api_key lấy trên open weather map
+    api_key = "7fef1a10cde3184dbb68920a2b941d52"
+    # tìm kiếm thông tin thời thời tiết của thành phố
+    call_url = ow_url + "appid=" + api_key + "&q=" + city + "&units=metric"
+    # truy cập đường dẫn của dòng 188 lấy dữ liệu thời tiết
+    response = requests.get(call_url)
+    # lưu dữ liệu thời tiết dưới dạng json và cho vào biến data
+    data = response.json()
+    # kiểm tra nếu ko gặp lỗi 404 thì xem xét và lấy dữ liệu
+    if data["cod"] != "404":
+        # lấy value của key main
+        city_res = data["main"]
+        # nhiệt độ hiện tại
+        current_temperature = city_res["temp"]
+        # áp suất hiện tại
+        current_pressure = city_res["pressure"]
+        # độ ẩm hiện tại
+        current_humidity = city_res["humidity"]
+        # thời gian mặt trời
+        suntime = data["sys"]
+        # 	lúc mặt trời mọc, mặt trời mọc
+        sunrise = datetime.datetime.fromtimestamp(suntime["sunrise"])
+        # lúc mặt trời lặn
+        sunset = datetime.datetime.fromtimestamp(suntime["sunset"])
+        # thông tin thêm
+        wthr = data["weather"]
+        # mô tả thời tiết
+        weather_description = wthr[0]["description"]
+        # Lấy thời gian hệ thống cho vào biến now
+        now = datetime.datetime.now()
+        # hiển thị thông tin với người dùng
+        content = f"""
+        Hôm nay là ngày {now.day} tháng {now.month} năm {now.year}
+        Mặt trời mọc vào {sunrise.hour} giờ {sunrise.minute} phút
+        Mặt trời lặn vào {sunset.hour} giờ {sunset.minute} phút
+        Nhiệt độ trung bình là {current_temperature} độ C
+        Áp suất không khí là {current_pressure} héc tơ Pascal
+        Độ ẩm là {current_humidity}%
+        """
+        speak(content)
+    else:
+        # nếu tên thành phố không đúng thì nó nói dòng dưới 227
+        speak("Không tìm thấy địa chỉ của bạn")
+
+def change_wallpaper():
+    api_key = "j6ZG82EYXwnxVguvP5p6STmjO5ZzTXWOmzvHbwKU21g"
+    url = 'https://api.unsplash.com/photos/random?client_id=' + \
+          api_key  # pic from unspalsh.com
+    f = urllib2.urlopen(url)
+    json_string = f.read()
+    f.close()
+    parsed_json = json.loads(json_string)
+    photo = parsed_json['urls']['full']
+    # Location where we download the image to.
+    urllib2.urlretrieve(photo, r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
+    image = os.path.join(r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, image, 3)
+    speak("Hình nền máy tính bạn đã được thay đổi. Bạn ra home xem có đẹp không nha ?")
+    
+def play_music(path):
+    # path là tham số chứa đường dẫn thư mục chứa nhạc
+    myPATH = path
+    # lấy file nhạc ra
+    ds = os.listdir(myPATH)
+    # dùng for mở từng bài nhạc
+    for i in ds:
+        print("\nĐang phát bài :  " + i)
+        os.system(myPATH + "\\" + i)
+        print("\nĐã phát xong bài : \t\t" + i)
+
+def play_youtube():
+    speak("Nói nội dung bạn muốn tìm trên youtube")
+    search = takeCommand()
+    url = f"https://www.youtube.com/search?q={search}"
+    webbrowser.get().open(url)
+    speak("Đây là thứ mà tôi tìm được bạn xem qua nhé")
+
+
+def play_youtube_2():
+    speak("Nói nội dung bạn muốn tìm trên youtube")
+    search = takeCommand()
+    while True:
+        result = YoutubeSearch(search, max_results=10).to_dict()
+        if result:
+            break
+    url = f"https://www.youtube.com" + result[0]['url_suffix']
+    webbrowser.get().open(url)
+    speak("Đây là thứ mà tôi tìm được bạn xem qua nhé")
+    print(result)
 
 
 def play():
@@ -123,13 +243,22 @@ def play():
                     speak('Xin lỗi bạn, tôi không tìm thấy bất kì kết quả nào !')
 
         elif 'mở youtube' in query:
-            openWeb('Youtube', "youtube.com")
+            var.set('Đang mở Youtube... !')
+            window.update()
+            speak('Chờ một chút, mình đang mở Youtube')
+            webbrowser.open("youtube.com")
 
         elif 'mở facebook' in query:
-            openWeb('Facebook', "facebook.com")
+            var.set('Đang mở Facebook... !')
+            window.update()
+            speak('Chờ một chút, mình đang mở Facebook')
+            webbrowser.open("facebook.com")
 
         elif 'mở google' in query:
-            openWeb('Google', "google.com")
+            var.set('Đang mở Google... !')
+            window.update()
+            speak('Chờ một chút, mình đang mở google')
+            webbrowser.open("google.com")
 
         elif 'chào bạn' in query:
             var.set('Chào bạn nha. Tôi có thể giúp gì cho bạn !')
@@ -137,16 +266,23 @@ def play():
             speak("Chào bạn nha. Tôi có thể giúp gì cho bạn !")
 			
         elif 'mở stackoverflow' in query:
-            openWeb('Stackoverflow', "stackoverflow.com")
-
-        elif ('nghe nhạc' in query) or ('change music' in query):
-            var.set('Here are your favorites')
+            var.set('Đang mở Stackoverflow... !')
             window.update()
-            speak('Here are your favorites')
-            music_dir = 'D:\My Music\Favourites' 
-            songs = os.listdir(music_dir)
-            n = random.randint(0,27)
-            os.startfile(os.path.join(music_dir, songs[n]))
+            speak('Chờ một chút, mình đang mở stackoverflow cho bạn đây !')
+            webbrowser.open('stackoverflow.com')
+
+        # elif 'nghe nhạc' in query:
+        #     var.set('Bạn nghe nhạc vui vẻ nhé')
+        #     window.update()
+        #     speak('Bạn nghe nhạc vui vẻ nhé')
+        #     music_dir = r'C:\Users\acer\Desktop\Đồ Án CS4\trolyao\music' 
+        #     songs = os.listdir(music_dir)
+        #     n = random.randint(0,27)
+        #     os.startfile(os.path.join(music_dir, songs[n]))
+
+        elif "mở nhạc" in query or "nghe nhạc" in query:
+                    speak("Ok. Tôi bắt đầu mở nhạc đây")
+                    play_music(r"C:\Users\acer\Desktop\music")
 
         elif 'giờ' in query:
             strtime = datetime.datetime.now().strftime("%H:%M:%S")
@@ -255,24 +391,29 @@ def play():
             webbrowser.get().open(url)
             speak(f'OK. {search} trên google đây nhé ')
         
-        elif 'email to me' in query:
-            try:
-                var.set("What should I say")
-                window.update()
-                speak('what should I say')
-                content = takeCommand()
-                to = a['name']
-                sendemail(to, content)
-                var.set('Email đã được gửi !')
-                window.update()
-                speak('Email đã được gửi !')
-
-            except Exception as e:
-                print(e)
-                var.set("Xin lỗi bạn! Tôi không thể gửi email này !")
-                window.update()
-                speak('Xin lỗi bạn! Tôi không thể gửi email này')
-		
+        elif 'youtube' in query:
+                speak("Bạn muốn tìm kiếm đơn giản hay phức tạp")
+                yeu_cau = takeCommand()
+                if "đơn giản" in yeu_cau:
+                    play_youtube()
+                    if input():
+                        pass
+                elif "phức tạp" in yeu_cau:
+                    play_youtube_2()
+                    if input("Tiếp tục y/n: ") == "y":
+                        pass
+            
+        elif "thời tiết" in query:
+           current_weather()
+       
+        
+        elif 'email' in query or 'mail' in query or 'gmail' in query:
+            send_email(query);
+           
+            
+        elif "hình nền" in query or "nền" in query or "background" in query:
+           change_wallpaper();
+      
         elif "mở python" in query:
             var.set("Opening Python Ide")
             window.update()
@@ -320,10 +461,11 @@ def play():
                 cv2.imshow('pic', frame)
                 cv2.imwrite('pic.jpg',frame)
             stream.release()
+            break
 
         elif 'quay video' in query:
             cap = cv2.VideoCapture(0)
-            out = cv2.VideoWriter('output.avi', -1, 20.0, (640,480))
+            out = cv2.VideoWriter('output.mp4', -1, 20.0, (640,480))
             while(cap.isOpened()):
                 ret, frame = cap.read()
                 if ret:
@@ -357,17 +499,12 @@ label1.config(font=("Courier", 20))
 var.set('Welcome')
 label1.pack()
 
-frames = [PhotoImage(file='src/images/Assistant.gif',format = 'gif -index %i' %(i)) for i in range(100)]
+frames = [PhotoImage(file='Assistant.gif',format = 'gif -index %i' %(i)) for i in range(100)]
 window.title('JARVIS')
 
 label = Label(window, width = 500, height = 500)
 label.pack()
 window.after(0, update, 0)
-
-label_name = Label(text="Type your name:") 
-entry_name = Entry()
-label_name.pack()
-entry_name.pack()
 
 btn0 = Button(text = 'WISH ME',width = 20, command = wishme, bg = '#5C85FB')
 btn0.config(font=("Courier", 12))
@@ -381,4 +518,3 @@ btn2.pack()
 
 
 window.mainloop()
-
