@@ -7,6 +7,7 @@ import datetime
 import speech_recognition as sr
 import wikipedia
 import webbrowser
+import requests
 import os
 import json
 import re
@@ -88,6 +89,60 @@ def takeCommand():
     var1.set(query)
     window.update()
     return query
+
+def current_weather():
+    speak("Bạn muốn xem thời tiết ở đâu ạ.")
+    # Đường dẫn trang web để lấy dữ liệu về thời tiết
+    ow_url = "http://api.openweathermap.org/data/2.5/weather?"
+    # lưu tên thành phố vào biến city
+    city = takeCommand()
+    # nếu biến city != 0 và = False thì để đấy ko xử lí gì cả
+    if not city:
+        pass
+    # api_key lấy trên open weather map
+    api_key = "7fef1a10cde3184dbb68920a2b941d52"
+    # tìm kiếm thông tin thời thời tiết của thành phố
+    call_url = ow_url + "appid=" + api_key + "&q=" + city + "&units=metric"
+    # truy cập đường dẫn của dòng 188 lấy dữ liệu thời tiết
+    response = requests.get(call_url)
+    # lưu dữ liệu thời tiết dưới dạng json và cho vào biến data
+    data = response.json()
+    # kiểm tra nếu ko gặp lỗi 404 thì xem xét và lấy dữ liệu
+    if data["cod"] != "404":
+        # lấy value của key main
+        city_res = data["main"]
+        # nhiệt độ hiện tại
+        current_temperature = city_res["temp"]
+        # áp suất hiện tại
+        current_pressure = city_res["pressure"]
+        # độ ẩm hiện tại
+        current_humidity = city_res["humidity"]
+        # thời gian mặt trời
+        suntime = data["sys"]
+        # 	lúc mặt trời mọc, mặt trời mọc
+        sunrise = datetime.datetime.fromtimestamp(suntime["sunrise"])
+        # lúc mặt trời lặn
+        sunset = datetime.datetime.fromtimestamp(suntime["sunset"])
+        # thông tin thêm
+        wthr = data["weather"]
+        # mô tả thời tiết
+        weather_description = wthr[0]["description"]
+        # Lấy thời gian hệ thống cho vào biến now
+        now = datetime.datetime.now()
+        # hiển thị thông tin với người dùng
+        content = f"""
+        Hôm nay là ngày {now.day} tháng {now.month} năm {now.year}
+        Mặt trời mọc vào {sunrise.hour} giờ {sunrise.minute} phút
+        Mặt trời lặn vào {sunset.hour} giờ {sunset.minute} phút
+        Nhiệt độ trung bình là {current_temperature} độ C
+        Áp suất không khí là {current_pressure} héc tơ Pascal
+        Độ ẩm là {current_humidity}%
+        """
+        speak(content)
+    else:
+        # nếu tên thành phố không đúng thì nó nói dòng dưới 227
+        speak("Không tìm thấy địa chỉ của bạn")
+
 
 def play():
     btn2['state'] = 'disabled'
@@ -267,6 +322,16 @@ def play():
             url = f"https://google.com/search?q={search}"
             webbrowser.get().open(url)
             speak(f'OK. {search} trên google đây nhé ')
+            
+        elif "thời tiết" in query:
+            # var.set("Bạn muốn tìm kiếm gì ?")
+            # window.update()
+            # speak("Bạn muốn tìm kiếm gì ?")
+            # search= takeCommand().lower()
+            # url = f"https://google.com/search?q={search}"
+            # webbrowser.get().open(url)
+            # speak(f'OK. {search} trên google đây nhé ')
+           current_weather()
         
         elif 'email to me' in query:
             try:
