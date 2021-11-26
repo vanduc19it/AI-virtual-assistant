@@ -1,5 +1,7 @@
 # AI-virtual-assistant
-Install library in your terminal before run program:
+you need to install the libraries before running program:
+if any libraries are not installed, just search google "python install ..." then open terminal to install them.
+example:
 + pip install pyttsx3
 + pip install SpeechRecognition
 + pip install pyaudio
