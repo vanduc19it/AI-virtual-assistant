@@ -8,6 +8,7 @@ import speech_recognition as sr
 import wikipedia
 import webbrowser
 import requests
+import time
 import os
 import json
 import re
@@ -174,6 +175,27 @@ def change_wallpaper():
     image = os.path.join(r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
     ctypes.windll.user32.SystemParametersInfoW(20, 0, image, 3)
     speak("Hình nền máy tính bạn đã được thay đổi. Bạn ra home xem có đẹp không nha ?")
+
+def play_youtube():
+    speak("Nói nội dung bạn muốn tìm trên youtube")
+    search = takeCommand()
+    url = f"https://www.youtube.com/search?q={search}"
+    webbrowser.get().open(url)
+    speak("Đây là thứ mà tôi tìm được bạn xem qua nhé")
+
+
+def play_youtube_2():
+    speak("Nói nội dung bạn muốn tìm trên youtube")
+    search = takeCommand()
+    while True:
+        result = YoutubeSearch(search, max_results=10).to_dict()
+        if result:
+            break
+    url = f"https://www.youtube.com" + result[0]['url_suffix']
+    webbrowser.get().open(url)
+    speak("Đây là thứ mà tôi tìm được bạn xem qua nhé")
+    print(result)
+
 
 def play():
     btn2['state'] = 'disabled'
@@ -353,53 +375,28 @@ def play():
             url = f"https://google.com/search?q={search}"
             webbrowser.get().open(url)
             speak(f'OK. {search} trên google đây nhé ')
+        
+        elif 'youtube' in query:
+                speak("Bạn muốn tìm kiếm đơn giản hay phức tạp")
+                yeu_cau = takeCommand()
+                if "đơn giản" in yeu_cau:
+                    play_youtube()
+                    if input():
+                        pass
+                elif "phức tạp" in yeu_cau:
+                    play_youtube_2()
+                    if input("Tiếp tục y/n: ") == "y":
+                        pass
             
         elif "thời tiết" in query:
-            # var.set("Bạn muốn tìm kiếm gì ?")
-            # window.update()
-            # speak("Bạn muốn tìm kiếm gì ?")
-            # search= takeCommand().lower()
-            # url = f"https://google.com/search?q={search}"
-            # webbrowser.get().open(url)
-            # speak(f'OK. {search} trên google đây nhé ')
            current_weather()
-        elif "thời tiết" in query:
-            # var.set("Bạn muốn tìm kiếm gì ?")
-            # window.update()
-            # speak("Bạn muốn tìm kiếm gì ?")
-            # search= takeCommand().lower()
-            # url = f"https://google.com/search?q={search}"
-            # webbrowser.get().open(url)
-            # speak(f'OK. {search} trên google đây nhé ')
-           change_wallpaper();
+       
         
         elif 'email' in query or 'mail' in query or 'gmail' in query:
             send_email(query);
-            # try:
-            #     var.set("Nội dung của bạn là gì")
-            #     window.update()
-            #     speak('what should I say')
-            #     content = takeCommand()
-            #     to = a['name']
-            #     sendemail(to, content)
-            #     var.set('Email đã được gửi !')
-            #     window.update()
-            #     speak('Email đã được gửi !')
-
-            # except Exception as e:
-            #     print(e)
-            #     var.set("Xin lỗi bạn! Tôi không thể gửi email này !")
-            #     window.update()
-            #     speak('Xin lỗi bạn! Tôi không thể gửi email này')
+           
             
         elif "hình nền" in query or "nền" in query or "background" in query:
-            # var.set("Bạn muốn tìm kiếm gì ?")
-            # window.update()
-            # speak("Bạn muốn tìm kiếm gì ?")
-            # search= takeCommand().lower()
-            # url = f"https://google.com/search?q={search}"
-            # webbrowser.get().open(url)
-            # speak(f'OK. {search} trên google đây nhé ')
            change_wallpaper();
       
         elif "mở python" in query:
@@ -449,10 +446,11 @@ def play():
                 cv2.imshow('pic', frame)
                 cv2.imwrite('pic.jpg',frame)
             stream.release()
+            break
 
         elif 'quay video' in query:
             cap = cv2.VideoCapture(0)
-            out = cv2.VideoWriter('output.avi', -1, 20.0, (640,480))
+            out = cv2.VideoWriter('output.mp4', -1, 20.0, (640,480))
             while(cap.isOpened()):
                 ret, frame = cap.read()
                 if ret:
