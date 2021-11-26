@@ -160,6 +160,20 @@ def current_weather():
         # nếu tên thành phố không đúng thì nó nói dòng dưới 227
         speak("Không tìm thấy địa chỉ của bạn")
 
+def change_wallpaper():
+    api_key = "j6ZG82EYXwnxVguvP5p6STmjO5ZzTXWOmzvHbwKU21g"
+    url = 'https://api.unsplash.com/photos/random?client_id=' + \
+          api_key  # pic from unspalsh.com
+    f = urllib2.urlopen(url)
+    json_string = f.read()
+    f.close()
+    parsed_json = json.loads(json_string)
+    photo = parsed_json['urls']['full']
+    # Location where we download the image to.
+    urllib2.urlretrieve(photo, r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
+    image = os.path.join(r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, image, 3)
+    speak("Hình nền máy tính bạn đã được thay đổi. Bạn ra home xem có đẹp không nha ?")
 
 def play():
     btn2['state'] = 'disabled'
@@ -349,6 +363,15 @@ def play():
             # webbrowser.get().open(url)
             # speak(f'OK. {search} trên google đây nhé ')
            current_weather()
+        elif "thời tiết" in query:
+            # var.set("Bạn muốn tìm kiếm gì ?")
+            # window.update()
+            # speak("Bạn muốn tìm kiếm gì ?")
+            # search= takeCommand().lower()
+            # url = f"https://google.com/search?q={search}"
+            # webbrowser.get().open(url)
+            # speak(f'OK. {search} trên google đây nhé ')
+           change_wallpaper();
         
         elif 'email' in query or 'mail' in query or 'gmail' in query:
             send_email(query);
@@ -368,7 +391,17 @@ def play():
             #     var.set("Xin lỗi bạn! Tôi không thể gửi email này !")
             #     window.update()
             #     speak('Xin lỗi bạn! Tôi không thể gửi email này')
-		
+            
+        elif "hình nền" in query or "nền" in query or "background" in query:
+            # var.set("Bạn muốn tìm kiếm gì ?")
+            # window.update()
+            # speak("Bạn muốn tìm kiếm gì ?")
+            # search= takeCommand().lower()
+            # url = f"https://google.com/search?q={search}"
+            # webbrowser.get().open(url)
+            # speak(f'OK. {search} trên google đây nhé ')
+           change_wallpaper();
+      
         elif "mở python" in query:
             var.set("Opening Python Ide")
             window.update()
