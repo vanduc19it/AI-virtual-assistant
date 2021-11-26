@@ -53,6 +53,23 @@ def sendemail(to, content):
     server.login('email id', 'password') 
     server.sendmail('email id', to, content)
     server.close()
+    
+def send_email(text):
+    speak("Bạn gửi email cho ai vậy nhỉ ?")
+    recipient = takeCommand()
+    if "Đức" in recipient:
+        speak("Nói cho tôi nội dung email bạn muốn gửi ! ... >")
+        content = takeCommand()
+        mail = smtplib.SMTP("smtp.gmail.com", 587)
+        mail.ehlo()
+        mail.starttls()
+        mail.login("vanduc19it@gmail.com", "vanduc190401")
+        mail.sendmail("vanduc19it@gmail.com",
+                      "cvduc.19it1@vku.udn.vn", str(content).encode("utf-8"))
+        mail.close()
+        speak("Email của bạn đã được gửi. Bạn vui lòng kiểm tra lại giúp !  >")
+    else:
+        speak("Tôi không hiểu bạn muốn gửi email cho ai  ...")
 
 def wishme():
     hour = int(datetime.datetime.now().hour)
@@ -333,23 +350,24 @@ def play():
             # speak(f'OK. {search} trên google đây nhé ')
            current_weather()
         
-        elif 'email to me' in query:
-            try:
-                var.set("What should I say")
-                window.update()
-                speak('what should I say')
-                content = takeCommand()
-                to = a['name']
-                sendemail(to, content)
-                var.set('Email đã được gửi !')
-                window.update()
-                speak('Email đã được gửi !')
+        elif 'email' in query or 'mail' in query or 'gmail' in query:
+            send_email(query);
+            # try:
+            #     var.set("Nội dung của bạn là gì")
+            #     window.update()
+            #     speak('what should I say')
+            #     content = takeCommand()
+            #     to = a['name']
+            #     sendemail(to, content)
+            #     var.set('Email đã được gửi !')
+            #     window.update()
+            #     speak('Email đã được gửi !')
 
-            except Exception as e:
-                print(e)
-                var.set("Xin lỗi bạn! Tôi không thể gửi email này !")
-                window.update()
-                speak('Xin lỗi bạn! Tôi không thể gửi email này')
+            # except Exception as e:
+            #     print(e)
+            #     var.set("Xin lỗi bạn! Tôi không thể gửi email này !")
+            #     window.update()
+            #     speak('Xin lỗi bạn! Tôi không thể gửi email này')
 		
         elif "mở python" in query:
             var.set("Opening Python Ide")
