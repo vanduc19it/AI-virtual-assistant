@@ -175,6 +175,17 @@ def change_wallpaper():
     image = os.path.join(r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
     ctypes.windll.user32.SystemParametersInfoW(20, 0, image, 3)
     speak("Hình nền máy tính bạn đã được thay đổi. Bạn ra home xem có đẹp không nha ?")
+    
+def play_music(path):
+    # path là tham số chứa đường dẫn thư mục chứa nhạc
+    myPATH = path
+    # lấy file nhạc ra
+    ds = os.listdir(myPATH)
+    # dùng for mở từng bài nhạc
+    for i in ds:
+        print("\nĐang phát bài :  " + i)
+        os.system(myPATH + "\\" + i)
+        print("\nĐã phát xong bài : \t\t" + i)
 
 def play_youtube():
     speak("Nói nội dung bạn muốn tìm trên youtube")
@@ -260,14 +271,18 @@ def play():
             speak('Chờ một chút, mình đang mở stackoverflow cho bạn đây !')
             webbrowser.open('stackoverflow.com')
 
-        elif ('nghe nhạc' in query) or ('change music' in query):
-            var.set('Here are your favorites')
-            window.update()
-            speak('Here are your favorites')
-            music_dir = 'D:\My Music\Favourites' 
-            songs = os.listdir(music_dir)
-            n = random.randint(0,27)
-            os.startfile(os.path.join(music_dir, songs[n]))
+        # elif 'nghe nhạc' in query:
+        #     var.set('Bạn nghe nhạc vui vẻ nhé')
+        #     window.update()
+        #     speak('Bạn nghe nhạc vui vẻ nhé')
+        #     music_dir = r'C:\Users\acer\Desktop\Đồ Án CS4\trolyao\music' 
+        #     songs = os.listdir(music_dir)
+        #     n = random.randint(0,27)
+        #     os.startfile(os.path.join(music_dir, songs[n]))
+
+        elif "mở nhạc" in query or "nghe nhạc" in query:
+                    speak("Ok. Tôi bắt đầu mở nhạc đây")
+                    play_music(r"C:\Users\acer\Desktop\music")
 
         elif 'giờ' in query:
             strtime = datetime.datetime.now().strftime("%H:%M:%S")
