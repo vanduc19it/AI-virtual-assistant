@@ -489,13 +489,16 @@ def handleSaveUserName():
         return messagebox.showerror( title="ERROR", message= 'please type your username!!')
     f = open('src/public/ahihi.txt', 'w+')
     f.write(username)
+    current_username = username
     f.close
+    
     return messagebox.showinfo(title="Success",message= 'save success')
 
 
 def getUserName():
-    f = open('src/public/ahihi.txt', 'r')
+    f = open('src/public/ahihi.txt', 'r', encoding='UTF-8')
     str = f.read()
+    print(str)
     current_username.set(str)
 
     
