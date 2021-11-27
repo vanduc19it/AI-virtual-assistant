@@ -487,9 +487,9 @@ def handleSaveUserName():
     username = entry_name.get()
     if username == '':
         return messagebox.showerror( title="ERROR", message= 'please type your username!!')
-    f = open('src/public/ahihi.txt', 'w+')
+    f = open('src/public/ahihi.txt', 'w+', encoding="utf8")
     f.write(username)
-    current_username = username
+    current_username.set(username)
     f.close
     
     return messagebox.showinfo(title="Success",message= 'save success')
