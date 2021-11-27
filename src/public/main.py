@@ -11,6 +11,7 @@ import requests
 import os, sys
 import json
 import re
+import time
 import ctypes
 import urllib
 import urllib.request as urllib2
@@ -178,8 +179,8 @@ def change_wallpaper():
     parsed_json = json.loads(json_string)
     photo = parsed_json['urls']['full']
     # Location where we download the image to.
-    urllib2.urlretrieve(photo, r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
-    image = os.path.join(r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
+    urllib2.urlretrieve(photo, r"C:\Users\acer\Desktop\DOANCS4\changeimage\image_change.png")
+    image = os.path.join(r"C:\Users\acer\Desktop\DOANCS4\changeimage\image_change.png")
     ctypes.windll.user32.SystemParametersInfoW(20, 0, image, 3)
     speak("Hình nền máy tính bạn đã được thay đổi. Bạn ra home xem có đẹp không nha ?")
 
@@ -214,7 +215,19 @@ def play_youtube_2():
     webbrowser.get().open(url)
     speak("Đây là thứ mà tôi tìm được bạn xem qua nhé")
     print(result)
-
+    
+def help_me():
+    speak("""Bot có thể giúp bạn thực hiện các câu lệnh sau đây:
+    1. Chào hỏi
+    2. Hiển thị giờ
+    3. Mở website, application
+    4. Tìm kiếm trên Google
+    5. Gửi email
+    6. Dự báo thời tiết
+    7. Mở video nhạc
+    8. Thay đổi hình nền máy tính
+    9. Đọc báo hôm nay
+    10. Kể bạn biết về thế giới """)
 
 def openWeb(nameWeb,url):
     var.set('Đang mở '+ nameWeb + '... !')
@@ -222,12 +235,47 @@ def openWeb(nameWeb,url):
     speak('Chờ một chút, mình đang mở '+ nameWeb)
     webbrowser.open(url)
 
+def tell_me_about():
+    try:
+        speak("Bạn muốn nghe về gì ạ")
+        text = takeCommand()
+        contents = wikipedia.summary(text).split('\n')
+        speak(contents[0])
+        time.sleep(10)
+        for content in contents[1:]:
+            speak("Bạn muốn nghe thêm không")
+            ans = takeCommand()
+            if "có" not in ans:
+                break    
+            speak(content)
+            time.sleep(10)
+
+        speak('Cảm ơn bạn đã lắng nghe!!!')
+    except:
+        speak("Mình không định nghĩa được thuật ngữ của bạn. Xin mời bạn nói lại")
+
+def read_news():
+    speak("Bạn muốn đọc báo về gì")
+    
+    queue = takeCommand()
+    params = {
+        'apiKey': '8237fd81c2af4bb8b82986de19c66b47',
+        "q": queue,
+    }
+    api_result = requests.get('http://newsapi.org/v2/top-headlines?', params)
+    api_response = api_result.json()
+    print("Tin tức")
+
+    for number, result in enumerate(api_response['articles'], start=1):
+        print(f"""Tin {number}:\nTiêu đề: {result['title']}\nTrích dẫn: {result['description']}\nLink: {result['url']}
+    """)
+        if number <= 3:
+            webbrowser.open(result['url'])
 
 def play():
     btn2['state'] = 'disabled'
     btn0['state'] = 'disabled'
     btn1.configure(bg = 'orange')
-    wishme()
     while True:
         btn1.configure(bg = 'orange')
         query = takeCommand().lower()
@@ -256,6 +304,12 @@ def play():
                     var.set('Xin lỗi bạn, tôi không tìm thấy bất kì kết quả nào !')
                     window.update()
                     speak('Xin lỗi bạn, tôi không tìm thấy bất kì kết quả nào !')
+                    
+        elif 'báo' in query or 'đọc báo' in query:
+            read_news()
+            
+        elif 'định nghĩa' in query:
+            tell_me_about()
 
         elif 'mở youtube' in query:
             openWeb('Youtube', "youtube.com")
@@ -273,15 +327,6 @@ def play():
 			
         elif 'mở stackoverflow' in query:
             openWeb('Stackoverflow', "stackoverflow.com")
-            
-        # elif 'nghe nhạc' in query:
-        #     var.set('Bạn nghe nhạc vui vẻ nhé')
-        #     window.update()
-        #     speak('Bạn nghe nhạc vui vẻ nhé')
-        #     music_dir = r'C:\Users\acer\Desktop\Đồ Án CS4\trolyao\music' 
-        #     songs = os.listdir(music_dir)
-        #     n = random.randint(0,27)
-        #     os.startfile(os.path.join(music_dir, songs[n]))
 
         elif "mở nhạc" in query or "nghe nhạc" in query:
                     speak("Ok. Tôi bắt đầu mở nhạc đây")
@@ -304,10 +349,8 @@ def play():
             window.update()
             speak("Mình rất hân hạnh khi được phục vụ cho bạn. Có việc gì cứ nói mình giúp cho nhé !! ")
 
-        elif 'can you do for me' in query:
-            var.set('I can do multiple tasks for you sir. tell me whatever you want to perform sir')
-            window.update()
-            speak('I can do multiple tasks for you sir. tell me whatever you want to perform sir')
+        elif 'có thể làm gì' in query:
+           help_me()
 
         elif 'tuổi' in query:
             var.set("Tôi năm nay hơn 70 tuổi rồi...")
@@ -462,11 +505,11 @@ def play():
                 cv2.imshow( constants.URL_IMAGE + 'pic', frame)
                 cv2.imwrite( constants.URL_IMAGE + 'pic.jpg',frame)
             stream.release()
-            break
+            
 
         elif 'quay video' in query:
             cap = cv2.VideoCapture(0)
-            out = cv2.VideoWriter('output.mp4', -1, 20.0, (640,480))
+            out = cv2.VideoWriter( constants.URL_IMAGE +'output.mp4', -1, 20.0, (640,480))
             while(cap.isOpened()):
                 ret, frame = cap.read()
                 if ret:
