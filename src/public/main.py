@@ -178,11 +178,12 @@ def change_wallpaper():
     parsed_json = json.loads(json_string)
     photo = parsed_json['urls']['full']
     # Location where we download the image to.
-    urllib2.urlretrieve(photo, r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
-    image = os.path.join(r"C:\Users\acer\Desktop\Đồ Án CS4\changeimage\image_change.png")
+    urllib2.urlretrieve(photo, r"C:\Users\acer\Desktop\DOANCS4\changeimage\image_change.png")
+    image = os.path.join(r"C:\Users\acer\Desktop\DOANCS4\changeimage\image_change.png")
     ctypes.windll.user32.SystemParametersInfoW(20, 0, image, 3)
     speak("Hình nền máy tính bạn đã được thay đổi. Bạn ra home xem có đẹp không nha ?")
-
+    
+    
 def play_music(path):
     # path là tham số chứa đường dẫn thư mục chứa nhạc
     myPATH = path
@@ -227,7 +228,7 @@ def play():
     btn2['state'] = 'disabled'
     btn0['state'] = 'disabled'
     btn1.configure(bg = 'orange')
-    wishme()
+
     while True:
         btn1.configure(bg = 'orange')
         query = takeCommand().lower()
@@ -466,7 +467,7 @@ def play():
 
         elif 'quay video' in query:
             cap = cv2.VideoCapture(0)
-            out = cv2.VideoWriter('output.mp4', -1, 20.0, (640,480))
+            out = cv2.VideoWriter(constants.URL_IMAGE + 'output.mp4', -1, 20.0, (640,480))
             while(cap.isOpened()):
                 ret, frame = cap.read()
                 if ret:
