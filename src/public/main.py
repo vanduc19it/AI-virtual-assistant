@@ -26,11 +26,11 @@ import smtplib
 import roman
 from PIL import Image
 from tkinter import messagebox
-
+import threading
 
 
 import constants 
-
+import addCommand
 
 
 
@@ -235,6 +235,12 @@ def openWeb(nameWeb,url):
     speak('Chờ một chút, mình đang mở '+ nameWeb)
     webbrowser.open(url)
 
+def openFile( path):
+    var.set("Đang mở ")
+    window.update()
+    speak("chờ một chút, mình đang mở ")
+    os.startfile(path)
+
 def tell_me_about():
     try:
         speak("Bạn muốn nghe về gì ạ")
@@ -272,11 +278,9 @@ def read_news():
         if number <= 3:
             webbrowser.open(result['url'])
 
-def play():
-    btn2['state'] = 'disabled'
-    btn0['state'] = 'disabled'
-    btn1.configure(bg = 'orange')
+def handleTask():
     while True:
+
         btn1.configure(bg = 'orange')
         query = takeCommand().lower()
         if 'tạm biệt' in query:
@@ -329,8 +333,8 @@ def play():
             openWeb('Stackoverflow', "stackoverflow.com")
 
         elif "mở nhạc" in query or "nghe nhạc" in query:
-                    speak("Ok. Tôi bắt đầu mở nhạc đây")
-                    play_music(r"C:\Users\acer\Desktop\music")
+            speak("Ok. Tôi bắt đầu mở nhạc đây")
+            play_music(r"C:\Users\acer\Desktop\music")
 
         elif 'giờ' in query:
             strtime = datetime.datetime.now().strftime("%H:%M:%S")
@@ -524,6 +528,25 @@ def play():
             cap.release()
             out.release()
             cv2.destroyAllWindows()
+        
+        else :
+            dic_commands = addCommand.getCommandDic()
+            for x in dic_commands:
+                if dic_commands[x]  in query:
+                    print("mở filee")
+                    openFile(x)
+                    return 
+        
+
+def play():
+    btn2['state'] = 'disabled'
+    btn0['state'] = 'disabled'
+    btn1.configure(bg = 'orange')
+
+    t = threading.Thread(target=handleTask)
+    t.start()
+
+
        
 
 def handleSaveUserName():
@@ -565,19 +588,28 @@ label1.pack()
 frames = [PhotoImage(file= constants.URL_IMAGE + 'Assistant.gif',format = 'gif -index %i' %(i)) for i in range(100)]
 window.title('JARVIS')
 
-label = Label(window, width = 500, height = 500)
+label = Label(window, width = 600, height = 500)
 label.pack()
 window.after(0, update, 0)
 
 
+frame_InputName = Frame(window)
 
-label_name = Label(window, text="Type your name:",font=("Courier", 18),bg = '#ADD8E6') 
-label_name.pack()
-entry_name = Entry(window, width = 30 )
-entry_name.pack()
-btn_saveName = Button(text = 'save name',width = 20, command = handleSaveUserName, bg = '#5C85FB')
+label_name = Label(frame_InputName, text="Type your name:",font=("Courier", 18),bg = '#ADD8E6') 
+label_name.grid(row=0,column=0)
+entry_name = Entry(frame_InputName, width = 30 )
+entry_name.grid(row=0, column=1)
+btn_saveName = Button(window,text = 'save name',width = 20, command = handleSaveUserName, bg = '#5C85FB')
 btn_saveName.config(font=("Courier", 12))
+frame_InputName.pack()
 btn_saveName.pack()
+
+
+
+btn_setting = Button(text = 'Setting',width = 20, command = addCommand.createGui, bg = '#5C85FB')
+btn_setting.config(font=("Courier", 12))
+btn_setting.pack()
+
 
 btn0 = Button(text = 'WISH ME',width = 20, command = wishme, bg = '#5C85FB')
 btn0.config(font=("Courier", 12))
