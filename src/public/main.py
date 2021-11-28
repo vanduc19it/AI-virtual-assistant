@@ -283,7 +283,7 @@ def handleTask():
 
         btn1.configure(bg = 'orange')
         query = takeCommand().lower()
-        if 'tạm biệt' in query:
+        if 'tạm biệt' in query or 'good bye' in query:
             var.set("Tạm biệt nhé !")
             btn1.configure(bg = '#5C85FB')
             btn2['state'] = 'normal'
@@ -314,6 +314,13 @@ def handleTask():
             
         elif 'định nghĩa' in query:
             tell_me_about()
+            
+        elif 'đổi tên' in query:
+            speak("Bạn muốn tôi gọi bạn là gì nhỉ?")
+            time.sleep(2)
+            rename = takeCommand()
+            handleSaveUserName(rename)
+            speak("OK bạn " + current_username.get() +". Bạn muốn tôi làm gì nữa không?")
 
         elif 'mở youtube' in query:
             openWeb('Youtube', "youtube.com")
@@ -324,7 +331,7 @@ def handleTask():
         elif 'mở google' in query:
             openWeb('Google', "google.com")
 
-        elif 'chào bạn' in query:
+        elif 'chào bạn' in query or 'hello' in query or 'alo' in query:
             var.set('Chào bạn nha. Tôi có thể giúp gì cho bạn !')
             window.update()
             speak("Chào bạn nha. Tôi có thể giúp gì cho bạn !")
@@ -549,16 +556,16 @@ def play():
 
        
 
-def handleSaveUserName():
-    username = entry_name.get()
-    if username == '':
-        return messagebox.showerror( title="ERROR", message= 'please type your username!!')
+def handleSaveUserName(rename):
+    # username = entry_name.get()
+    # if username == '':
+    #     return messagebox.showerror( title="ERROR", message= 'please type your username!!')
     f = open('src/public/ahihi.txt', 'w+', encoding="utf8")
-    f.write(username)
-    current_username.set(username)
+    f.write(rename)
+    current_username.set(rename)
     f.close
     
-    return messagebox.showinfo(title="Success",message= 'save success')
+    # return messagebox.showinfo(title="Success",message= 'save success')
 
 
 def getUserName():
