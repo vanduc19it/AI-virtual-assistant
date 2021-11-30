@@ -5,6 +5,7 @@ from tkinter import Frame, messagebox
 
 import handleFile
 import constants
+import handleData
 
 url_command  = constants.URL_File + "command.json"
 
@@ -14,21 +15,19 @@ row_current = 1
 def addCommand(path , command, frame):
     if path == "" or command == "":
         return messagebox.showerror( title="ERROR", message= 'type enough infor ,please !!')
-    str = handleFile.readFile(url_command)    
-    content = json.loads(str)
-    
-    content.update({''+path: command})
-    content_cmd = json.dumps(content)   
 
-    handleFile.wirteFile(url_command, content_cmd)
+    handleData.addData({''+path: command}, url_command)
+    # str = handleFile.readFile(url_command)    
+    # content = json.loads(str)
+    
+    # content.update({''+path: command})
+    # content_cmd = json.dumps(content,ensure_ascii=False)
+    # handleFile.wirteFile(url_command, content_cmd)
     addRowInTable(path, command, frame)
 
 
 def getCommandDic():
-    str = handleFile.readFile(url_command)
-    commands = json.loads(str)
-    print(commands)
-    return commands
+    return handleData.getData(url_command)
 
 def selectFile(entryfile):
 
@@ -56,7 +55,7 @@ def createGui():
   
     root = tk.Tk()
     root.geometry("500x450")
-    root.title("Setting Command")
+    root.title("Add Command")
         
     label1 = tk.Label(root, text="Setting command")
 

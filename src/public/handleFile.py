@@ -1,4 +1,5 @@
 import io 
+import json
 
 def readFile(path):
     try:
@@ -13,6 +14,7 @@ def readFile(path):
 
 def wirteFile(path, content ):
     try:
+        print(content)
         f_write = open(path, 'w+', encoding="utf8")
         f_write.write(content)
         f_write.close
