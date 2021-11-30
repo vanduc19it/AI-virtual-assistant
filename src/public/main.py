@@ -26,12 +26,15 @@ import smtplib
 import roman
 from PIL import Image
 from tkinter import messagebox
+from tkinter import simpledialog
+
 import threading
 
 
 import constants 
+import setting
 import addCommand
-
+import addInforUser
 
 
 numbers = {'hundred':100, 'thousand':1000, 'lakh':100000}
@@ -45,6 +48,8 @@ window = Tk()
 global var
 global var1
 
+global btn0, btn1, btn2
+global label, frames
 var = StringVar()
 var1 = StringVar()
 
@@ -80,7 +85,7 @@ def send_email(text):
     else:
         speak("Tôi không hiểu bạn muốn gửi email cho ai  ...")
 
-def wishme():  
+def wishme(window):  
     hour = int(datetime.datetime.now().hour)
     if hour >= 0 and hour <= 12:
         var.set("Good morning sir !") 
@@ -109,7 +114,7 @@ def takeCommand():
         var.set("Recognizing...")
         window.update()
         print("Trợ lí ảo: Recognizing...")
-        query = r.recognize_google(audio, language='vi-VN')
+        query = r.recognize_google(audio, language='vi-Vi')
     except Exception as e:
         return "None"
     var1.set(query)
@@ -278,7 +283,8 @@ def read_news():
         if number <= 3:
             webbrowser.open(result['url'])
 
-def handleTask():
+def handleTask(window):
+    
     while True:
 
         btn1.configure(bg = 'orange')
@@ -319,7 +325,7 @@ def handleTask():
             speak("Bạn muốn tôi gọi bạn là gì nhỉ?")
             time.sleep(2)
             rename = takeCommand()
-            handleSaveUserName(rename)
+            setting.handleSaveUserName(rename)
             speak("OK bạn " + current_username.get() +". Bạn muốn tôi làm gì nữa không?")
 
         elif 'mở youtube' in query:
@@ -545,90 +551,84 @@ def handleTask():
                     return 
         
 
-def play():
+def play(window):
     btn2['state'] = 'disabled'
     btn0['state'] = 'disabled'
     btn1.configure(bg = 'orange')
 
-    t = threading.Thread(target=handleTask)
+    t = threading.Thread(target=handleTask(window))
     t.start()
 
 
-       
-
-def handleSaveUserName(rename):
-    # username = entry_name.get()
-    # if username == '':
-    #     return messagebox.showerror( title="ERROR", message= 'please type your username!!')
-    f = open('src/public/ahihi.txt', 'w+', encoding="utf8")
-    f.write(rename)
-    current_username.set(rename)
-    f.close
-    
-    # return messagebox.showinfo(title="Success",message= 'save success')
-
-
-def getUserName():
-    f = open('src/public/ahihi.txt', 'r', encoding='UTF-8')
-    str = f.read()
-    print(str)
-    current_username.set(str)
-
+# def getUserName():
+#     f = open('src/public/ahihi.json', 'r', encoding='UTF-8')
+#     str = f.read()
+#     content = json.loads(str)
+#     current_username.set(content["username"])
     
 
 def update(ind):
+
     frame = frames[(ind)%100]
     ind += 1
     label.configure(image=frame)
     window.after(100, update, ind)
 
-label2 = Label(window, textvariable = var1, bg = '#FAB60C')
-label2.config(font=("Courier", 20))
-var1.set('User Said:')
-label2.pack()
+def createGuiMain():
+    global btn0, btn1, btn2
+    global label, frames
+    label2 = Label(window, textvariable = var1, bg = '#FAB60C')
+    label2.config(font=("Courier", 20))
+    var1.set('User Said:')
+    label2.pack()
 
-label1 = Label(window, textvariable = var, bg = '#ADD8E6')
-label1.config(font=("Courier", 20))
-var.set('Welcome')
-label1.pack()
+    label1 = Label(window, textvariable = var, bg = '#ADD8E6')
+    label1.config(font=("Courier", 20))
+    var.set('Welcome')
+    label1.pack()
 
-frames = [PhotoImage(file= constants.URL_IMAGE + 'Assistant.gif',format = 'gif -index %i' %(i)) for i in range(100)]
-window.title('JARVIS')
+    frames = [PhotoImage(file= constants.URL_IMAGE + 'Assistant.gif',format = 'gif -index %i' %(i)) for i in range(100)]
+    window.title('JARVIS')
 
-label = Label(window, width = 600, height = 500)
-label.pack()
-window.after(0, update, 0)
-
-
-frame_InputName = Frame(window)
-
-label_name = Label(frame_InputName, text="Type your name:",font=("Courier", 18),bg = '#ADD8E6') 
-label_name.grid(row=0,column=0)
-entry_name = Entry(frame_InputName, width = 30 )
-entry_name.grid(row=0, column=1)
-btn_saveName = Button(window,text = 'save name',width = 20, command = handleSaveUserName, bg = '#5C85FB')
-btn_saveName.config(font=("Courier", 12))
-frame_InputName.pack()
-btn_saveName.pack()
+    label = Label(window, width = 600, height = 500)
+    label.pack()
+    window.after(0, update, 0)
 
 
 
-btn_setting = Button(text = 'Setting',width = 20, command = addCommand.createGui, bg = '#5C85FB')
-btn_setting.config(font=("Courier", 12))
-btn_setting.pack()
+    btn_setting = Button(text = 'Setting',width = 20, command = setting.createGuiSetting , bg = '#5C85FB')
+    btn_setting.config(font=("Courier", 12))
+    btn_setting.pack()
 
 
-btn0 = Button(text = 'WISH ME',width = 20, command = wishme, bg = '#5C85FB')
-btn0.config(font=("Courier", 12))
-btn0.pack()
-btn1 = Button(text = 'PLAY',width = 20,command = play, bg = '#5C85FB')
-btn1.config(font=("Courier", 12))
-btn1.pack()
-btn2 = Button(text = 'EXIT',width = 20, command = window.destroy, bg = '#5C85FB')
-btn2.config(font=("Courier", 12))
-btn2.pack()
+    btn0 = Button(text = 'WISH ME',width = 20,  command=lambda:wishme(window), bg = '#5C85FB')
+    btn0.config(font=("Courier", 12))
+    btn0.pack()
+    btn1 = Button(text = 'PLAY',width = 20, command=lambda:play(window), bg = '#5C85FB')
+    btn1.config(font=("Courier", 12))
+    btn1.pack()
+    btn2 = Button(text = 'EXIT',width = 20, command = window.destroy, bg = '#5C85FB')
+    btn2.config(font=("Courier", 12))
+    btn2.pack()
 
-getUserName()
+    window.mainloop()
 
-window.mainloop()
+infor =addInforUser.getInfor()
+print(infor)
+current_username.set(infor["username"])
+passw = infor["pass"]
 
+
+def checkPass():
+    if passw != "":
+        str = simpledialog.askstring("Input", "Type your password ?")
+        while str != passw:
+            if str == None:
+                return
+            str = simpledialog.askstring("Input", "Type your password?")
+       
+    createGuiMain()
+       
+
+
+checkPass()
