@@ -246,6 +246,43 @@ def openFile( path):
     speak("chờ một chút, mình đang mở ")
     os.startfile(path)
 
+def covid():
+    base_url = "https://disease.sh/"
+    speak("Bạn muốn xem tình hình covid hiện nay ở đâu ?")
+    country = takeCommand()
+    if 'thế giới' in country or 'tất cả' in country:
+        complete_url = "https://disease.sh/v3/covid-19/all"
+        response = requests.get(complete_url)  # Trả về giá trị của phản hồi [200]
+        x = response.json()
+        total = x["cases"]
+        todaycases = x["todayCases"]
+        death = x["deaths"]
+        todayDeaths = x["todayDeaths"]
+        recovered = x["recovered"]
+        todayRecovered = x["todayRecovered"]
+        speak(f"Tổng số ca mắc trên toàn thế giới là: {total}"
+              f"\nSố ca mắc hôm nay trên toàn thế giới là: {todaycases}"
+              f"\nTổng số ca đã tử vong  là: {death}"
+              f"\nSố ca tử vong hôm nay là: {todayDeaths}"
+              f"\nTổng số ca đã hồi phục là: {recovered}"
+              f"\nSố ca hồi phục hôm nay là: {todayRecovered}")
+    else:
+        complete_url = base_url + 'v3/covid-19/countries/' + country
+        response = requests.get(complete_url)  # Trả về giá trị của phản hồi [200]
+        x = response.json()
+        total = x["cases"]
+        todaycases = x["todayCases"]
+        death = x["deaths"]
+        todayDeaths = x["todayDeaths"]
+        recovered = x["recovered"]
+        todayRecovered = x["todayRecovered"]
+        speak(f"Tổng số ca mắc tại {country} là: {total}"
+              f"\nSố ca mắc hôm nay là: {todaycases}"
+              f"\nTổng số ca đã tử vong  là: {death}"
+              f"\nSố ca tử vong hôm nay là: {todayDeaths}"
+              f"\nTổng số ca đã hồi phục là: {recovered}"
+              f"\nSố ca hồi phục hôm nay là: {todayRecovered}")
+
 def tell_me_about():
     try:
         speak("Bạn muốn nghe về gì ạ")
@@ -471,7 +508,8 @@ def handleTask(window):
         elif 'email' in query or 'mail' in query or 'gmail' in query:
             send_email(query)
 
-
+        elif 'tình hình' in query or 'covid' in query:
+            covid()
         elif "hình nền" in query or "nền" in query or "background" in query:
             change_wallpaper()
 		
