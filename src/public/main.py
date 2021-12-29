@@ -35,7 +35,7 @@ import constants
 import setting
 import addCommand
 import addInforUser
-
+import chatbot 
 
 numbers = {'hundred':100, 'thousand':1000, 'lakh':100000}
 a = {'name':'your email'}
@@ -321,11 +321,11 @@ def read_news():
             webbrowser.open(result['url'])
 
 def handleTask(window):
-    
-    while True:
 
+    while True:
         btn1.configure(bg = 'orange')
         query = takeCommand().lower()
+
         if 'tạm biệt' in query or 'good bye' in query:
             var.set("Tạm biệt nhé !")
             btn1.configure(bg = '#5C85FB')
@@ -373,11 +373,6 @@ def handleTask(window):
 
         elif 'mở google' in query:
             openWeb('Google', "google.com")
-
-        elif 'chào bạn' in query or 'hello' in query or 'alo' in query:
-            var.set('Chào bạn nha. Tôi có thể giúp gì cho bạn !')
-            window.update()
-            speak("Chào bạn nha. Tôi có thể giúp gì cho bạn !")
 			
         elif 'mở stackoverflow' in query:
             openWeb('Stackoverflow', "stackoverflow.com")
@@ -398,18 +393,8 @@ def handleTask(window):
             window.update()
             speak("Hôm nay là ngày %s" %strdate) 
 
-        elif 'thank you' in query or 'cảm ơn' in query:
-            var.set("Mình rất hân hạnh !!!")
-            window.update()
-            speak("Mình rất hân hạnh khi được phục vụ cho bạn. Có việc gì cứ nói mình giúp cho nhé !! ")
-
         elif 'có thể làm gì' in query:
            help_me()
-
-        elif 'tuổi' in query:
-            var.set("Tôi năm nay hơn 70 tuổi rồi...")
-            window.update()
-            speak("Tôi năm nay hơn 70 tuổi rồi mà tôi chưa bao giờ thấy cái trường hợp nào như này cả !")
 
         elif 'open media player' in query:
             var.set("opening VLC media Player")
@@ -417,21 +402,6 @@ def handleTask(window):
             speak("opening V L C media player")
             path = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" 
             os.startfile(path)
-
-        elif 'tên' in query:
-            var.set("Tên của tôi là Jarvis thưa ngài")
-            window.update()
-            speak('Tên của tôi là Jarvis thưa ngài')
-
-        elif 'tạo ra bạn' in query:
-            var.set('Đó là bạn đức đẹp trai vip pro nha !')
-            window.update()
-            speak('Đó là bạn đức đẹp trai vip pro nha !')
-
-        elif 'nói xin chào' in query:
-            var.set('Xin chào tất cả mọi người. Mình tên là Jarvis')
-            window.update()
-            speak('Xin chào tất cả mọi người. Mình tên là Jarvis')
 
         elif 'open pycharm' in query:
             var.set("Openong Pycharm")
@@ -568,7 +538,6 @@ def handleTask(window):
             while(cap.isOpened()):
                 ret, frame = cap.read()
                 if ret:
-                    
                     out.write(frame)
 
                     cv2.imshow('frame',frame)
@@ -580,13 +549,24 @@ def handleTask(window):
             out.release()
             cv2.destroyAllWindows()
         
+
         else :
-            dic_commands = addCommand.getCommandDic()
-            for x in dic_commands:
-                if dic_commands[x]  in query:
-                    print("mở filee")
-                    openFile(x)
-                    return 
+            ints = chatbot.predict_class(query)
+            res = chatbot.get_response(ints, chatbot.intents)
+            if(res != '00'):
+                speak(res)
+                window.update() 
+            else:
+                dic_commands = addCommand.getCommandDic()
+                for x in dic_commands:
+                    if dic_commands[x]  in query:
+                        print("mở filee")
+                        openFile(x)
+                        continue 
+
+
+    
+
         
 
 def play(window):
@@ -634,7 +614,7 @@ def createGuiMain():
 
 
 
-    btn_setting = Button(text = 'Setting',width = 20, command = setting.createGuiSetting , bg = '#5C85FB')
+    btn_setting = Button(text = 'Cài đặt',width = 20, command = setting.createGuiSetting , bg = '#5C85FB')
     btn_setting.config(font=("Courier", 12))
     btn_setting.pack()
 
@@ -642,10 +622,10 @@ def createGuiMain():
     btn0 = Button(text = 'WISH ME',width = 20,  command=lambda:wishme(window), bg = '#5C85FB')
     btn0.config(font=("Courier", 12))
     btn0.pack()
-    btn1 = Button(text = 'PLAY',width = 20, command=lambda:play(window), bg = '#5C85FB')
+    btn1 = Button(text = 'bắt đầu',width = 20, command=lambda:play(window), bg = '#5C85FB')
     btn1.config(font=("Courier", 12))
     btn1.pack()
-    btn2 = Button(text = 'EXIT',width = 20, command = window.destroy, bg = '#5C85FB')
+    btn2 = Button(text = 'Thoát',width = 20, command = window.destroy, bg = '#5C85FB')
     btn2.config(font=("Courier", 12))
     btn2.pack()
 

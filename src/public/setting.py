@@ -53,7 +53,7 @@ def createGuiSetting():
     frame_pass.pack()
 
     
-    btn_setting = tk.Button(text = 'add Command',width = 20, command = addCommand.createGui, bg = '#5C85FB', padx=10)
+    btn_setting = tk.Button(root,text = 'add Command',width = 20, command = addCommand.createGui, bg = '#5C85FB', padx=10)
     btn_setting.config(font=("Courier", 12))
     btn_setting.pack()
 
@@ -61,4 +61,4 @@ def createGuiSetting():
     root.mainloop()
 
 
-createGuiSetting()
+#createGuiSetting()
