@@ -22,5 +22,5 @@ def addData(content, url_file):
 def getData(url_file):
     str = handleFile.readFile(url_file)
     datas = json.loads(str)
-    print(datas)
+    #print(datas)
     return datas

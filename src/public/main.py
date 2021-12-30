@@ -116,7 +116,7 @@ def takeCommand():
         print("Trợ lí ảo: Recognizing...")
         query = r.recognize_google(audio, language='vi-Vi')
     except Exception as e:
-        return "None"
+        return "none"
     var1.set(query)
     window.update()
     return query
@@ -325,7 +325,10 @@ def handleTask(window):
     while True:
         btn1.configure(bg = 'orange')
         query = takeCommand().lower()
-
+        if query == None or query == "none": 
+            print("ko xác định") 
+            continue
+        
         if 'tạm biệt' in query or 'good bye' in query:
             var.set("Tạm biệt nhé !")
             btn1.configure(bg = '#5C85FB')
@@ -560,9 +563,14 @@ def handleTask(window):
                 dic_commands = addCommand.getCommandDic()
                 for x in dic_commands:
                     if dic_commands[x]  in query:
-                        print("mở filee")
-                        openFile(x)
-                        continue 
+                        try:
+                            print("mở filee")
+                            openFile(x) 
+                        except:
+                            print("Lỗi mở file")
+                        continue
+
+        print("hết một vòng lặp")
 
 
     
