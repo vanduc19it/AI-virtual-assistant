@@ -23,6 +23,146 @@
     "patterns": ["Cảm ơn", "Cảm ơn bạn", "Mình cảm ơn bạn", "Cảm ơn bạn rất nhiều"],
     "responses": ["Mình rất hân hạnh khi được phục vụ cho bạn. Có việc gì cứ nói mình giúp cho nhé "],
     "context_set": ""
+  },
+  {"tag": "read_news",
+    "patterns": ["đọc báo", "đọc tin tức", "tin tức hôm nay"],
+    "responses": ["read_news"],
+    "context_set": ""
+  },
+  {"tag": "define",
+    "patterns": ["Định Nghĩa"],
+    "responses": ["define"],
+    "context_set": ""
+  },
+  {"tag": "covid",
+    "patterns": ["tình hình covid", "dịch covid", "tình hình dịch covid"],
+    "responses": ["covid"],
+    "context_set": ""
+  },
+  {"tag": "get_Hour",
+    "patterns": ["giờ", "mấy giờ rồi", "mấy giờ"],
+    "responses": ["get_Hour"],
+    "context_set": ""
+  },
+  {"tag": "get_Date",
+    "patterns": ["Hôm nay là ngày bao nhiêu", "Hôm nay là ngày mấy", "Ngày bao nhiêu", "ngày mấy"],
+    "responses": ["get_Date"],
+    "context_set": ""
+  },
+  {"tag": "search_google",
+    "patterns": ["tìm kiếm google"],
+    "responses": ["search_google"],
+    "context_set": ""
+  },
+  {"tag": "get_weather",
+    "patterns": ["thời tiết hôm nay thế nào", "thời tiết"],
+    "responses": ["get_weather"],
+    "context_set": ""
+  },
+  {"tag": "change_wallpaper",
+    "patterns": ["hình nền", "thay đổi hình nền", "thay đổi hình nền máy tính"],
+    "responses": ["change_wallpaper"],
+    "context_set": ""
+  },
+  {"tag": "help_me",
+    "patterns": ["Tôi có thể làm được gì", "giúp tôi"],
+    "responses": ["help_me"],
+    "context_set": ""
+  },
+  {"tag": "open_youtube",
+   "patterns": ["mở youtube với", "mở youtube", "xem youtube", "mở youtube đi bạn ơi"],
+   "responses": ["open_youtube"],
+   "context_set": ""
+  },
+  {"tag": "open_facebook",
+   "patterns": ["mở facebook với", "mở facebook", "xem facebook", "mở facebook đi bạn ơi"],
+   "responses": ["open_facebook"],
+   "context_set": ""
+  },
+  {"tag": "open_google",
+    "patterns": ["mở google với", "mở google", "xem google", "mở google đi bạn ơi"],
+    "responses": ["open_google"],
+    "context_set": ""
+  },
+  {"tag": "open_stackoverflow",
+    "patterns": ["mở stackoverflow với", "mở stackoverflow", "xem stackoverflow", "mở stackoverflow đi bạn ơi"],
+    "responses": ["open_stackoverflow"],
+    "context_set": ""
+  },
+  {"tag": "sendMail",
+    "patterns": ["gửi email", "gửi thư", "gửi mail"],
+    "responses": ["sendMail"],
+    "context_set": ""
+  },
+  {"tag": "changeName",
+    "patterns": ["tối muốn đổi tên của tôi", "đổi tên tôi đi bạn ơi", "đổi tên hộ mình với bạn"],
+    "responses": ["changeName"],
+    "context_set": ""
+  },
+  {"tag": "open_word",
+    "patterns": ["mở word với", "mở word", "xem word", "mở word đi bạn ơi"],
+    "responses": ["open_word"],
+    "context_set": ""
+  },
+  {"tag": "open_powerpoint",
+    "patterns": ["mở powerpoint với", "mở powerpoint", "xem powerpoint", "mở powerpoint đi bạn ơi"],
+    "responses": ["open_powerpoint"],
+    "context_set": ""
+  },
+  {"tag": "open_excel",
+    "patterns":  ["mở excel với", "mở excel", "xem excel", "mở excel đi bạn ơi"],
+    "responses": ["open_excel"],
+    "context_set": ""
+  },
+  {"tag": "calculation",
+    "patterns": ["tinh toán", "tính một phép tính"],
+    "responses": ["calculation"],
+    "context_set": ""
+  },
+  {"tag": "take_of_photo",
+    "patterns": ["chụp ảnh"],
+    "responses": ["take_of_photo"],
+    "context_set": ""
+  },
+  {"tag": "take_of_video",
+    "patterns": ["quay video"],
+    "responses": ["take_of_video"],
+    "context_set": ""
+  },
+  {"tag": "open_notepad",
+    "patterns": ["mở notepad"],
+    "responses": ["open_notepad"],
+    "context_set": ""
+  },
+  {"tag": "open_cmd",
+    "patterns": ["mở cmd"],
+    "responses": ["open_cmd"],
+    "context_set": ""
+  },
+  {"tag": "open_python",
+    "patterns":  ["mở python với", "mở python", "xem python", "mở python đi bạn ơi"],
+    "responses": ["open_python"],
+    "context_set": ""
+  },
+  {"tag": "open_anaconda",
+    "patterns": ["mở anaconda với", "mở anaconda", "xem anaconda", "mở anaconda đi bạn ơi"],
+    "responses": ["open_anaconda"],
+    "context_set": ""
+  },
+  {"tag": "open_chorme",
+    "patterns":["mở chorme với", "mở chorme", "xem chorme", "mở chorme đi bạn ơi"],
+    "responses": ["open_chorme"],
+    "context_set": ""
+  },
+  {"tag": "open_pycharm64",
+    "patterns": ["mở pycharm với", "mở pycharm", "xem pycharm", "mở pycharm đi bạn ơi"],
+    "responses": ["open_pycharm64"],
+    "context_set": ""
+  },
+  {"tag": "open_media_player",
+    "patterns": ["mở media player với", "mở media player", "xem media player", "mở media player đi bạn ơi"],
+    "responses": ["open_media_player"],
+    "context_set": ""
   }
 ]
 }

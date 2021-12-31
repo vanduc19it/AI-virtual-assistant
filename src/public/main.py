@@ -68,7 +68,7 @@ def sendemail(to, content):
     server.close()
 
 
-def send_email(text):
+def send_email():
     speak("Bạn gửi email cho ai vậy nhỉ ?")
     recipient = takeCommand()
     if "Đức" in recipient:
@@ -241,10 +241,15 @@ def openWeb(nameWeb,url):
     webbrowser.open(url)
 
 def openFile( path):
-    var.set("Đang mở ")
-    window.update()
-    speak("chờ một chút, mình đang mở ")
-    os.startfile(path)
+    try:
+        var.set("Đang mở ")
+        window.update()
+        speak("chờ một chút, mình đang mở ")
+        os.startfile(path)
+    except:
+        speak("Xin lỗi, tôi không mở được")
+
+
 
 def covid():
     base_url = "https://disease.sh/"
@@ -320,6 +325,152 @@ def read_news():
         if number <= 3:
             webbrowser.open(result['url'])
 
+def get_Hour():
+    strtime = datetime.datetime.now().strftime("%H:%M:%S")
+    var.set("Bây giờ là %s" % strtime)
+    window.update()
+    speak("Bây giờ là %s" %strtime)
+
+def get_Date():
+    strdate = datetime.datetime.today().strftime("%d %m %y")
+    var.set("Hôm nay là ngày %s" %strdate)
+    window.update()
+    speak("Hôm nay là ngày %s" %strdate) 
+
+def search_google():
+    var.set("Bạn muốn tìm kiếm gì ?")
+    window.update()
+    speak("Bạn muốn tìm kiếm gì ?")
+    search= takeCommand().lower()
+    url = f"https://google.com/search?q={search}"
+    webbrowser.get().open(url)
+    speak(f'OK. {search} trên google đây nhé ')
+
+def change_name():
+    speak("Bạn muốn tôi gọi bạn là gì nhỉ?")
+    time.sleep(2)
+    rename = takeCommand()
+    setting.handleSaveUserName(rename)
+    speak("OK bạn " + current_username.get() +". Bạn muốn tôi làm gì nữa không?")
+
+def calculation():
+    sum = 0
+    var.set('Yes Sir, please tell the numbers')
+    window.update()
+    speak('Yes Sir, please tell the numbers')
+    while True:
+        query = takeCommand()
+        if 'answer' in query:
+            var.set('here is result'+str(sum))
+            window.update()
+            speak('here is result'+str(sum))
+            break
+        elif query:
+            if query == 'x**':
+                digit = 30
+            elif query in numbers:
+                digit = numbers[query]
+            elif 'x' in query:
+                query = query.upper()
+                digit = roman.fromRoman(query)
+            elif query.isdigit():
+                digit = int(query)
+            else:
+                digit = 0
+            sum += digit
+
+
+def take_of_photo():
+    stream = cv2.VideoCapture(0)
+    grabbed, frame = stream.read()
+    if grabbed:
+        cv2.imshow( constants.URL_IMAGE + 'pic', frame)
+        cv2.imwrite( constants.URL_IMAGE + 'pic.jpg',frame)
+    stream.release()
+
+def take_of_video():
+    cap = cv2.VideoCapture(0)
+    out = cv2.VideoWriter( constants.URL_IMAGE +'output.mp4', -1, 20.0, (640,480))
+    while(cap.isOpened()):
+        ret, frame = cap.read()
+        if ret:
+            out.write(frame)
+
+            cv2.imshow('frame',frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        else:
+            break
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()   
+
+def open_wikipedia(): # chưa thêm tinh năng nay
+    # if 'mở wikipedia' in query:
+    #     webbrowser.open('wikipedia.com')
+    # else:
+    #     try:
+    #         speak("searching wikipedia")
+    #         query = query.replace("according to wikipedia", "")
+    #         results = wikipedia.summary(query, sentences=2)
+    #         speak("According to wikipedia")
+    #         var.set(results)
+    #         window.update()
+    #         speak(results)
+    #     except Exception as e:
+    #         var.set('Xin lỗi bạn, tôi không tìm thấy bất kì kết quả nào !')
+    #         window.update()
+    #         speak('Xin lỗi bạn, tôi không tìm thấy bất kì kết quả nào !')
+    pass
+
+
+
+def watch_youtube(): # chua them tinh nang nay 
+    speak("Bạn muốn tìm kiếm đơn giản hay phức tạp")
+    yeu_cau = takeCommand()
+    if "đơn giản" in yeu_cau:
+        play_youtube()
+        if input():
+            pass
+    elif "phức tạp" in yeu_cau:
+        play_youtube_2()
+        if input("Tiếp tục y/n: ") == "y":
+            pass
+
+
+data_function = {
+    "read_news": read_news,
+    "define": tell_me_about,
+    "covid": covid,
+    "get_Hour": get_Hour,
+    "get_Date": get_Date,
+    "search_google": search_google,
+    "get_weather": current_weather,
+    "change_wallpaper": change_wallpaper,
+    "help_me": help_me, 
+    "open_youtube": lambda:openWeb('Youtube', "youtube.com"),
+    "open_facebook":lambda:openWeb('Facebook', "facebook.com"),
+    "open_google":  lambda:openWeb('Google', "google.com"),
+    "open_stackoverflow": lambda:openWeb('Stackoverflow', "stackoverflow.com"),
+    "sendMail": send_email, 
+    "changeName": change_name, 
+    "open_word":    lambda:openFile(constants.PATH_SOFTWARE_MICROSFT +"WINWORD.EXE"),
+    "open_powerpoint": lambda:openFile(constants.PATH_SOFTWARE_MICROSFT +"POWERPNT.EXE"),
+    "open_excel":   lambda:openFile(constants.PATH_SOFTWARE_MICROSFT +"EXCEL.EXE"),
+    "calculation":  calculation,
+    "take_of_photo": take_of_photo,
+    "take_of_video": take_of_video,
+    "open_notepad": lambda:openFile(constants.PATH_SYSTEM32 +"notepad.exe"),
+    "open_cmd":     lambda:openFile(constants.PATH_SYSTEM32 +"cmd.exe"),
+    "open_python":  lambda:openFile(constants.PATH_SOFTWARE_PROGRAM +"Python 3.7\\IDLE (Python 3.7 64-bit)"),
+    "open_anaconda":lambda:openFile(constants.PATH_SOFTWARE_PROGRAM +"Anaconda3 (64-bit)\\Anaconda Navigator"),
+    "open_chorme":  lambda:openFile("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"),
+    "open_pycharm64":lambda:openFile("C:\\Program Files\\JetBrains\\PyCharm Community Edition 2018.3.2\\bin\\pycharm64.exe" ),
+    "open_media_player":lambda:openFile("C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" )
+    #"watch_youtube": watch_youtube
+}
+
+
 def handleTask(window):
 
     while True:
@@ -338,226 +489,19 @@ def handleTask(window):
             speak("Tạm biệt bạn. Hẹn gặp lại bạn sau !")
             break
 
-        elif 'wikipedia' in query:
-            if 'mở wikipedia' in query:
-                webbrowser.open('wikipedia.com')
-            else:
-                try:
-                    speak("searching wikipedia")
-                    query = query.replace("according to wikipedia", "")
-                    results = wikipedia.summary(query, sentences=2)
-                    speak("According to wikipedia")
-                    var.set(results)
-                    window.update()
-                    speak(results)
-                except Exception as e:
-                    var.set('Xin lỗi bạn, tôi không tìm thấy bất kì kết quả nào !')
-                    window.update()
-                    speak('Xin lỗi bạn, tôi không tìm thấy bất kì kết quả nào !')
-                    
-        elif 'báo' in query or 'đọc báo' in query:
-            read_news()
-            
-        elif 'định nghĩa' in query:
-            tell_me_about()
-            
-        elif 'đổi tên' in query:
-            speak("Bạn muốn tôi gọi bạn là gì nhỉ?")
-            time.sleep(2)
-            rename = takeCommand()
-            setting.handleSaveUserName(rename)
-            speak("OK bạn " + current_username.get() +". Bạn muốn tôi làm gì nữa không?")
-
-        elif 'mở youtube' in query:
-            openWeb('Youtube', "youtube.com")
-
-        elif 'mở facebook' in query:
-            openWeb('Facebook', "facebook.com")
-
-        elif 'mở google' in query:
-            openWeb('Google', "google.com")
-			
-        elif 'mở stackoverflow' in query:
-            openWeb('Stackoverflow', "stackoverflow.com")
-
-        elif "mở nhạc" in query or "nghe nhạc" in query:
-            speak("Ok. Tôi bắt đầu mở nhạc đây")
-            play_music(r"C:\Users\acer\Desktop\music")
-
-        elif 'giờ' in query:
-            strtime = datetime.datetime.now().strftime("%H:%M:%S")
-            var.set("Bây giờ là %s" % strtime)
-            window.update()
-            speak("Bây giờ là %s" %strtime)
-
-        elif 'ngày' in query:
-            strdate = datetime.datetime.today().strftime("%d %m %y")
-            var.set("Hôm nay là ngày %s" %strdate)
-            window.update()
-            speak("Hôm nay là ngày %s" %strdate) 
-
-        elif 'có thể làm gì' in query:
-           help_me()
-
-        elif 'open media player' in query:
-            var.set("opening VLC media Player")
-            window.update()
-            speak("opening V L C media player")
-            path = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" 
-            os.startfile(path)
-
-        elif 'open pycharm' in query:
-            var.set("Openong Pycharm")
-            window.update()
-            speak("Opening Pycharm")
-            path = "C:\\Program Files\\JetBrains\\PyCharm Community Edition 2018.3.2\\bin\\pycharm64.exe" 
-            os.startfile(path)
-
-        elif 'mở chrome' in query or 'open chrome' in query:
-            var.set("Đang mở Google Chrome...")
-            window.update()
-            speak("chờ một chút, mình đang mở Google Chrome")
-            path = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
-            os.startfile(path)
-            
-        elif 'mở word' in query or 'open word' in query or 'mở microsoft word' in query or 'open microsoft word' in query:
-            var.set("Đang mở Microsoft Word...")
-            window.update()
-            speak("chờ một chút, mình đang mở Microsoft Word")
-            path = "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE"
-            os.startfile(path)
-            
-        elif 'mở powerpoint' in query or 'open powerpoint' in query or 'mở microsoft powerpoint' in query or 'open microsoft powerpoint' in query:
-            var.set("Đang mở Microsoft Powpoint...")
-            window.update()
-            speak("chờ một chút, mình đang mở Microsoft Powpoint")
-            path = "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE"
-            os.startfile(path)
-        
-        elif 'mở excel' in query or 'open excel' in query or 'mở microsoft excel' in query or 'open microsoft excel' in query:
-            var.set("Đang mở Microsoft Excel...")
-            window.update()
-            speak("chờ một chút, mình đang mở Microsoft Excel")
-            path = "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE"
-            os.startfile(path)
-            
-        elif 'mở notepad' in query or 'open notepad' in query:
-            var.set("Đang mở Notepad...")
-            window.update()
-            speak("chờ một chút, mình đang mở Notepad")
-            path = "C:\\WINDOWS\\System32\\notepad.exe"
-            os.startfile(path)
-            
-        elif 'mở cmd' in query or 'open cmd' in query:
-            var.set("Đang mở cmd...")
-            window.update()
-            speak("chờ một chút, mình đang mở cmd")
-            path = "C:\\WINDOWS\\System32\\cmd.exe"
-            os.startfile(path)
-        
-        elif "tìm kiếm" in query or 'search google' in query:
-            var.set("Bạn muốn tìm kiếm gì ?")
-            window.update()
-            speak("Bạn muốn tìm kiếm gì ?")
-            search= takeCommand().lower()
-            url = f"https://google.com/search?q={search}"
-            webbrowser.get().open(url)
-            speak(f'OK. {search} trên google đây nhé ')
-
-        elif 'youtube' in query:
-                speak("Bạn muốn tìm kiếm đơn giản hay phức tạp")
-                yeu_cau = takeCommand()
-                if "đơn giản" in yeu_cau:
-                    play_youtube()
-                    if input():
-                        pass
-                elif "phức tạp" in yeu_cau:
-                    play_youtube_2()
-                    if input("Tiếp tục y/n: ") == "y":
-                        pass
-        
-        elif "thời tiết" in query:
-           current_weather()
-        elif 'email' in query or 'mail' in query or 'gmail' in query:
-            send_email(query)
-
-        elif 'tình hình' in query or 'covid' in query:
-            covid()
-        elif "hình nền" in query or "nền" in query or "background" in query:
-            change_wallpaper()
-		
-        elif "mở python" in query:
-            var.set("Opening Python Ide")
-            window.update()
-            speak('opening python Ide')
-            os.startfile('C:\\Users\\mridu\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Python 3.7\\IDLE (Python 3.7 64-bit)') 
-
-        elif 'open anaconda' in query:
-            var.set('Opening Anaconda')
-            window.update()
-            speak('opening anaconda')
-            os.startfile("C:\\Users\\mridu\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Anaconda3 (64-bit)\\Anaconda Navigator") 
-
-        elif 'calculation' in query:
-            sum = 0
-            var.set('Yes Sir, please tell the numbers')
-            window.update()
-            speak('Yes Sir, please tell the numbers')
-            while True:
-                query = takeCommand()
-                if 'answer' in query:
-                    var.set('here is result'+str(sum))
-                    window.update()
-                    speak('here is result'+str(sum))
-                    break
-                elif query:
-                    if query == 'x**':
-                        digit = 30
-                    elif query in numbers:
-                        digit = numbers[query]
-                    elif 'x' in query:
-                        query = query.upper()
-                        digit = roman.fromRoman(query)
-                    elif query.isdigit():
-                        digit = int(query)
-                    else:
-                        digit = 0
-                    sum += digit
-      
-           
-
-        elif 'chụp ảnh' in query:
-            stream = cv2.VideoCapture(0)
-            grabbed, frame = stream.read()
-            if grabbed:
-                cv2.imshow( constants.URL_IMAGE + 'pic', frame)
-                cv2.imwrite( constants.URL_IMAGE + 'pic.jpg',frame)
-            stream.release()
-            
-
-        elif 'quay video' in query:
-            cap = cv2.VideoCapture(0)
-            out = cv2.VideoWriter( constants.URL_IMAGE +'output.mp4', -1, 20.0, (640,480))
-            while(cap.isOpened()):
-                ret, frame = cap.read()
-                if ret:
-                    out.write(frame)
-
-                    cv2.imshow('frame',frame)
-                    if cv2.waitKey(1) & 0xFF == ord('q'):
-                        break
-                else:
-                    break
-            cap.release()
-            out.release()
-            cv2.destroyAllWindows()
-        
+        # elif "mở nhạc" in query or "nghe nhạc" in query:
+        #     speak("Ok. Tôi bắt đầu mở nhạc đây")
+        #     play_music(r"C:\Users\acer\Desktop\music")
 
         else :
             ints = chatbot.predict_class(query)
             res = chatbot.get_response(ints, chatbot.intents)
             if(res != '00'):
-                speak(res)
+                print(res)
+                try:
+                    data_function[res]()
+                except:
+                    speak(res)
                 window.update() 
             else:
                 dic_commands = addCommand.getCommandDic()
@@ -567,7 +511,7 @@ def handleTask(window):
                             print("mở filee")
                             openFile(x) 
                         except:
-                            print("Lỗi mở file")
+                            pass
                         continue
 
         print("hết một vòng lặp")
@@ -655,6 +599,5 @@ def checkPass():
        
     createGuiMain()
        
-
 
 checkPass()
