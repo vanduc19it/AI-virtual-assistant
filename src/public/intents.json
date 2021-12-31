@@ -6,7 +6,7 @@
   },
   {"tag": "age",
    "patterns": ["Bạn bao nhiêu tuổi rồi", "Tuổi của bạn là bao nhiêu"],
-   "responses": ["tôi vừa được tạo ra cách đây vài ngày "],
+   "responses": ["tôi vừa được tạo ra cách đây vài ngày ","tôi năm nay hơn 70 tuổi rồi mà ..."],
    "context_set": ""
   },
   {"tag": "name",
