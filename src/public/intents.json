@@ -1,6 +1,6 @@
 {"intents": [
   {"tag": "greeting",
-   "patterns": ["xin chào", "Chào", "Chào một ngày tốt lành", "Chào trợ lý ảo"],
+   "patterns": ["xin chào", "Chào", "Chào một ngày tốt lành", "Chào trợ lý ảo" ,"chào bạn"],
    "responses": ["xin chào bạn, tôi có thể giúp gì cho bạn", "tôi có thể giúp gì cho bạn", "Chào bạn nha"],
    "context_set": ""
   },
