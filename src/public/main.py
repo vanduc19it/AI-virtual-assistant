@@ -311,6 +311,7 @@ def tell_me_about():
         speak('Cảm ơn bạn đã lắng nghe!!!')
     except:
         speak("Xin lỗi Mình không định nghĩa được thuật ngữ của bạn")
+        
 
 def read_news():
     speak("Bạn muốn đọc báo về gì")
@@ -512,13 +513,13 @@ def handleTask(window):
                 for x in dic_commands:
                     if dic_commands[x]  in query:
                         try:
-                            print("mở filee")
+                            print("mở file")
                             openFile(x) 
                         except:
                             pass
                         continue
 
-        print("hết một vòng lặp")
+        print("Hết một vòng lặp!")
 
 
     
@@ -600,7 +601,7 @@ def checkPass():
             if str == None:
                 return
             str = simpledialog.askstring("Input", "Nhập mật khẩu của bạn ?")
-       
+           
     createGuiMain()
        
 

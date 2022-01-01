@@ -5,13 +5,13 @@
    "context_set": ""
   },
   {"tag": "age",
-   "patterns": ["Bạn bao nhiêu tuổi rồi", "Tuổi của bạn là bao nhiêu"],
+   "patterns": ["Bạn bao nhiêu tuổi rồi", "Tuổi của bạn là bao nhiêu","bao nhiêu tuổi","tuổi","how old are you"],
    "responses": ["tôi vừa được tạo ra cách đây vài ngày ","tôi năm nay hơn 70 tuổi rồi mà ..."],
    "context_set": ""
   },
   {"tag": "name",
    "patterns": ["Tên của bạn là gì", "Bạn tên là gì"],
-   "responses": ["Bạn có thể gọi tôi là trợ lý ảo javavis", "Tên của tôi là javavis đó thưa bạn"],
+   "responses": ["Bạn có thể gọi tôi là trợ lý ảo javis", "Tên của tôi là javis nha"],
    "context_set": ""
   },
   {"tag": "infor",
@@ -25,62 +25,62 @@
     "context_set": ""
   },
   {"tag": "read_news",
-    "patterns": ["đọc báo", "đọc tin tức", "tin tức hôm nay"],
+    "patterns": ["đọc báo", "đọc tin tức", "tin tức hôm nay" ,"tin tức"],
     "responses": ["read_news"],
     "context_set": ""
   },
   {"tag": "define",
-    "patterns": ["Định Nghĩa"],
+    "patterns": ["Định Nghĩa", "tôi muốn nghe về", "nghe về","đọc định nghĩa", "nói định nghĩa về"],
     "responses": ["define"],
     "context_set": ""
   },
   {"tag": "covid",
-    "patterns": ["tình hình covid", "dịch covid", "tình hình dịch covid"],
+    "patterns": ["tình hình covid", "dịch covid", "tình hình dịch covid", "covid 19"],
     "responses": ["covid"],
     "context_set": ""
   },
   {"tag": "get_Hour",
-    "patterns": ["giờ", "mấy giờ rồi", "mấy giờ"],
+    "patterns": ["giờ", "mấy giờ rồi", "mấy giờ", "bây giờ là mấy giờ"],
     "responses": ["get_Hour"],
     "context_set": ""
   },
   {"tag": "get_Date",
-    "patterns": ["Hôm nay là ngày bao nhiêu", "Hôm nay là ngày mấy", "Ngày bao nhiêu", "ngày mấy"],
+    "patterns": ["Hôm nay là ngày bao nhiêu", "Hôm nay là ngày mấy", "Ngày bao nhiêu", "ngày mấy", "ngày"],
     "responses": ["get_Date"],
     "context_set": ""
   },
   {"tag": "search_google",
-    "patterns": ["tìm kiếm google"],
+    "patterns": ["tìm kiếm google","tìm kiếm", "tìm kiếm trên google"],
     "responses": ["search_google"],
     "context_set": ""
   },
   {"tag": "get_weather",
-    "patterns": ["thời tiết hôm nay thế nào", "thời tiết"],
+    "patterns": ["thời tiết hôm nay thế nào", "thời tiết","xem thời tiết","thời tiết hôm nay"],
     "responses": ["get_weather"],
     "context_set": ""
   },
   {"tag": "change_wallpaper",
-    "patterns": ["hình nền", "thay đổi hình nền", "thay đổi hình nền máy tính"],
+    "patterns": ["hình nền", "thay đổi hình nền", "thay đổi hình nền máy tính", "đổi hình nền"],
     "responses": ["change_wallpaper"],
     "context_set": ""
   },
   {"tag": "help_me",
-    "patterns": ["Tôi có thể làm được gì", "giúp tôi"],
+    "patterns": ["bạn có thể làm được gì", "giúp tôi","có thể làm gì","bạn có thể giúp gì cho tôi"],
     "responses": ["help_me"],
     "context_set": ""
   },
   {"tag": "open_youtube",
-   "patterns": ["mở youtube với", "mở youtube", "xem youtube", "mở youtube đi bạn ơi"],
+   "patterns": ["mở youtube với", "mở youtube", "xem youtube", "mở youtube đi bạn ơi", "open youtube"],
    "responses": ["open_youtube"],
    "context_set": ""
   },
   {"tag": "open_facebook",
-   "patterns": ["mở facebook với", "mở facebook", "xem facebook", "mở facebook đi bạn ơi"],
+   "patterns": ["mở facebook với", "mở facebook", "xem facebook", "mở facebook đi bạn ơi","open facebook","mở facebook.com"],
    "responses": ["open_facebook"],
    "context_set": ""
   },
   {"tag": "open_google",
-    "patterns": ["mở google với", "mở google", "xem google", "mở google đi bạn ơi"],
+    "patterns": ["mở google với", "mở google", "xem google", "mở google đi bạn ơi","mở google.com"],
     "responses": ["open_google"],
     "context_set": ""
   },
@@ -90,52 +90,52 @@
     "context_set": ""
   },
   {"tag": "sendMail",
-    "patterns": ["gửi email", "gửi thư", "gửi mail"],
+    "patterns": ["gửi email", "gửi thư", "gửi mail","tôi muốn gửi email"],
     "responses": ["sendMail"],
     "context_set": ""
   },
   {"tag": "changeName",
-    "patterns": ["tối muốn đổi tên của tôi", "đổi tên tôi đi bạn ơi", "đổi tên hộ mình với bạn"],
+    "patterns": ["tối muốn đổi tên của tôi", "đổi tên tôi đi bạn ơi", "đổi tên hộ mình với bạn","đổi tên"],
     "responses": ["changeName"],
     "context_set": ""
   },
   {"tag": "open_word",
-    "patterns": ["mở word với", "mở word", "xem word", "mở word đi bạn ơi"],
+    "patterns": ["mở word với", "mở word", "xem word", "mở word đi bạn ơi","open word"],
     "responses": ["open_word"],
     "context_set": ""
   },
   {"tag": "open_powerpoint",
-    "patterns": ["mở powerpoint với", "mở powerpoint", "xem powerpoint", "mở powerpoint đi bạn ơi"],
+    "patterns": ["mở powerpoint với", "mở powerpoint", "xem powerpoint", "mở powerpoint đi bạn ơi","open powerpoint"],
     "responses": ["open_powerpoint"],
     "context_set": ""
   },
   {"tag": "open_excel",
-    "patterns":  ["mở excel với", "mở excel", "xem excel", "mở excel đi bạn ơi"],
+    "patterns":  ["mở excel với", "mở excel", "xem excel", "mở excel đi bạn ơi","open excel"],
     "responses": ["open_excel"],
     "context_set": ""
   },
   {"tag": "calculation",
-    "patterns": ["tinh toán", "tính một phép tính"],
+    "patterns": ["tính toán", "tính một phép tính","tôi cần tính toán"],
     "responses": ["calculation"],
     "context_set": ""
   },
   {"tag": "take_of_photo",
-    "patterns": ["chụp ảnh"],
+    "patterns": ["chụp ảnh","tôi muốn chụp ảnh","chụp ảnh cho tôi"],
     "responses": ["take_of_photo"],
     "context_set": ""
   },
   {"tag": "take_of_video",
-    "patterns": ["quay video"],
+    "patterns": ["quay video","tôi muốn quay video"],
     "responses": ["take_of_video"],
     "context_set": ""
   },
   {"tag": "open_notepad",
-    "patterns": ["mở notepad"],
+    "patterns": ["mở notepad","open notepad"],
     "responses": ["open_notepad"],
     "context_set": ""
   },
   {"tag": "open_cmd",
-    "patterns": ["mở cmd"],
+    "patterns": ["mở cmd","open cmd"],
     "responses": ["open_cmd"],
     "context_set": ""
   },
@@ -150,7 +150,7 @@
     "context_set": ""
   },
   {"tag": "open_chorme",
-    "patterns":["mở chorme với", "mở chorme", "xem chorme", "mở chorme đi bạn ơi"],
+    "patterns":["mở chorme với", "mở chorme", "xem chorme", "mở chorme đi bạn ơi","open chrome"],
     "responses": ["open_chorme"],
     "context_set": ""
   },
@@ -165,7 +165,7 @@
     "context_set": ""
   },
   {"tag": "stop_bye",
-    "patterns": ["tạm biệt bạn", "hẹn gặp lại bạn", "gặp lại sau", "tạm biệt", "dừng lại"],
+    "patterns": ["tạm biệt bạn", "hẹn gặp lại bạn", "gặp lại sau", "tạm biệt", "dừng lại","stop"],
     "responses": ["stop_bye"],
     "context_set": ""
   }
