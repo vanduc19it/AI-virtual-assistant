@@ -15,8 +15,8 @@
    "context_set": ""
   },
   {"tag": "infor",
-    "patterns": ["Bạn là gì", "Bạn là ai", "Ai là người đã tạo ra bạn", "Bạn do ai tạo ra"],
-    "responses": ["Tôi là một ứng dụng trợ lý ảo, được tạo ra bởi hai bạn sinh viên tại trường vku"],
+    "patterns": ["Bạn là gì", "Bạn là ai", "Ai là người đã tạo ra bạn", "do ai tạo ra", "sinh ra ở đâu" ],
+    "responses": ["Tôi là một ứng dụng trợ lý ảo, được tạo ra bởi hai bạn sinh viên tại trường đại học việt hàn"],
     "context_set": ""
   },
   {"tag": "thanks",
@@ -162,6 +162,11 @@
   {"tag": "open_media_player",
     "patterns": ["mở media player với", "mở media player", "xem media player", "mở media player đi bạn ơi"],
     "responses": ["open_media_player"],
+    "context_set": ""
+  },
+  {"tag": "stop_bye",
+    "patterns": ["tạm biệt bạn", "hẹn gặp lại bạn", "gặp lại sau", "tạm biệt", "dừng lại"],
+    "responses": ["stop_bye"],
     "context_set": ""
   }
 ]

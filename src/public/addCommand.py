@@ -1,15 +1,41 @@
 import json 
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
-from tkinter import Frame, messagebox
+from tkinter import Frame, Label, StringVar, messagebox
 
 import handleFile
 import constants
 import handleData
+import config_voice
 
 url_command  = constants.URL_File + "command.json"
 
 row_current = 1
+
+global var_label_voice 
+global frame
+
+
+def updateUi( s = "hhi"):
+ 
+    var_label_voice.set(s)
+    frame.update()
+
+
+def speak(audio):
+    try:
+        config_voice.speak(audio)
+    except:
+        pass
+
+def tackcommand(entry_command):
+    s  =  config_voice.get_voice(updateUi)
+
+    len_entry = len(entry_command.get())
+    entry_command.delete(0, len_entry)
+    entry_command.insert(0,s)
+    updateUi("hello")
+
 
 
 def addCommand(path , command, frame):
@@ -52,13 +78,15 @@ def handle_btnAddCommand(entry_file, entry_command, frame):
 
 
 def createGui():
-  
+   
     root = tk.Tk()
+    global var_label_voice
+    var_label_voice = StringVar()
     root.geometry("500x450")
     root.title("Add Command")
         
     label1 = tk.Label(root, text="Setting command")
-
+    global frame
     frame = tk.Frame(root)
 
     entry_File = tk.Entry(frame)
@@ -66,11 +94,17 @@ def createGui():
     btn_file = tk.Button(frame, text="select File", command=lambda:selectFile(entry_File))
     btn_file.grid(row=0, column=1)
 
+    #global var_label_voice 
+    #var_label_voice = StringVar()
+
     entry_command = tk.Entry(frame)
     entry_command.grid(row=1, column=0)
-    btn_command = tk.Button(frame, text="voice")
+    btn_command = tk.Button(frame, text="voice", command=lambda:tackcommand(entry_command))
     btn_command.grid(row=1, column=1)
-
+    label_voice = Label(frame, textvariable = var_label_voice)
+    var_label_voice.set("haha")
+    label_voice.grid(row=1, column=2)
+    
     btn_addCommand = tk.Button(root, text="add", command=lambda:handle_btnAddCommand( entry_File,entry_command, frame_display))
 
 
@@ -153,4 +187,4 @@ def addRowInTable(path, command,frame_display) :
 
 #getCommandDic()
 # addCommand("ahi3i", "ahaha2")
-
+#updateUi("helo")

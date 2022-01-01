@@ -2,7 +2,7 @@ from tkinter import *
 import cv2
 import PIL.Image, PIL.ImageTk
 import playsound
-import pyttsx3
+
 import datetime
 import speech_recognition as sr
 import wikipedia
@@ -31,17 +31,15 @@ from tkinter import simpledialog
 import threading
 
 
-import constants 
+import constants
 import setting
 import addCommand
 import addInforUser
 import chatbot 
+import config_voice
 
 numbers = {'hundred':100, 'thousand':1000, 'lakh':100000}
 a = {'name':'your email'}
-engine = pyttsx3.init('sapi5')
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[1].id)
 
 window = Tk()
 
@@ -56,8 +54,11 @@ var1 = StringVar()
 current_username = StringVar()
 
 def speak(audio):
-    engine.say(audio)
-    engine.runAndWait()
+    config_voice.speak(audio)
+
+def update_gui(s):
+    var.set(s)
+    window.update()
 
 def sendemail(to, content):
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -102,24 +103,28 @@ def wishme(window):
     speak("Tôi là trợ lí ảo. Tôi có thể giúp gì cho bạn") 
 
 def takeCommand():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        var.set("Listening...")
-        window.update()
-        print("Trợ lí ảo: Listening...")
-        r.pause_threshold = 1
-        r.energy_threshold = 400
-        audio = r.listen(source)
-    try:
-        var.set("Recognizing...")
-        window.update()
-        print("Trợ lí ảo: Recognizing...")
-        query = r.recognize_google(audio, language='vi-Vi')
-    except Exception as e:
-        return "none"
+    query =  config_voice.get_voice(update_gui)
     var1.set(query)
     window.update()
     return query
+#     r = sr.Recognizer()
+#     with sr.Microphone() as source:
+#         var.set("Listening...")
+#         window.update()
+#         print("Trợ lí ảo: Listening...")
+#         r.pause_threshold = 1
+#         r.energy_threshold = 400
+#         audio = r.listen(source)
+#     try:
+#         var.set("Recognizing...")
+#         window.update()
+#         print("Trợ lí ảo: Recognizing...")
+#         query = r.recognize_google(audio, language='vi-Vi')
+#     except Exception as e:
+#         return "none"
+#     var1.set(query)
+#     window.update()
+#     return query
 
 def current_weather():
     speak("Bạn muốn xem thời tiết ở đâu ạ.")
@@ -305,7 +310,7 @@ def tell_me_about():
 
         speak('Cảm ơn bạn đã lắng nghe!!!')
     except:
-        speak("Mình không định nghĩa được thuật ngữ của bạn. Xin mời bạn nói lại")
+        speak("Xin lỗi Mình không định nghĩa được thuật ngữ của bạn")
 
 def read_news():
     speak("Bạn muốn đọc báo về gì")
@@ -379,7 +384,6 @@ def calculation():
                 digit = 0
             sum += digit
 
-
 def take_of_photo():
     stream = cv2.VideoCapture(0)
     grabbed, frame = stream.read()
@@ -424,7 +428,6 @@ def open_wikipedia(): # chưa thêm tinh năng nay
     pass
 
 
-
 def watch_youtube(): # chua them tinh nang nay 
     speak("Bạn muốn tìm kiếm đơn giản hay phức tạp")
     yeu_cau = takeCommand()
@@ -437,6 +440,13 @@ def watch_youtube(): # chua them tinh nang nay
         if input("Tiếp tục y/n: ") == "y":
             pass
 
+def stop_bye():
+    var.set("Tạm biệt nhé !")
+    btn1.configure(bg = '#5C85FB')
+    btn2['state'] = 'normal'
+    btn0['state'] = 'normal'
+    window.update()
+    speak("Tạm biệt bạn. Hẹn gặp lại bạn sau !")
 
 data_function = {
     "read_news": read_news,
@@ -479,15 +489,6 @@ def handleTask(window):
         if query == None or query == "none": 
             print("ko xác định") 
             continue
-        
-        if 'tạm biệt' in query or 'good bye' in query:
-            var.set("Tạm biệt nhé !")
-            btn1.configure(bg = '#5C85FB')
-            btn2['state'] = 'normal'
-            btn0['state'] = 'normal'
-            window.update()
-            speak("Tạm biệt bạn. Hẹn gặp lại bạn sau !")
-            break
 
         # elif "mở nhạc" in query or "nghe nhạc" in query:
         #     speak("Ok. Tôi bắt đầu mở nhạc đây")
@@ -498,6 +499,9 @@ def handleTask(window):
             res = chatbot.get_response(ints, chatbot.intents)
             if(res != '00'):
                 print(res)
+                if res == "stop_bye":
+                    stop_bye()
+                    break
                 try:
                     data_function[res]()
                 except:
@@ -591,11 +595,11 @@ passw = infor["pass"]
 
 def checkPass():
     if passw != "":
-        str = simpledialog.askstring("Input", "Type your password ?")
+        str = simpledialog.askstring("Input", "Nhập mật khẩu của bạn ?")
         while str != passw:
             if str == None:
                 return
-            str = simpledialog.askstring("Input", "Type your password?")
+            str = simpledialog.askstring("Input", "Nhập mật khẩu của bạn ?")
        
     createGuiMain()
        
