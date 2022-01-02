@@ -42,7 +42,7 @@ def addCommand(path , command, frame):
     if path == "" or command == "":
         return messagebox.showerror( title="ERROR", message= 'type enough infor ,please !!')
 
-    handleData.addData({''+path: command}, url_command)
+    handleData.addData({''+command: path }, url_command)
     # str = handleFile.readFile(url_command)    
     # content = json.loads(str)
     
@@ -120,9 +120,9 @@ def createGui():
     for column in range(4):
         text_heading = ""
         if column  == 0:
-            text_heading = "path"
-        elif column == 1:
             text_heading = "command"
+        elif column == 1:
+            text_heading = "path"
         
         label = tk.Label(frame_display, text=text_heading, bg="white", fg="black", padx=3, pady=3)
         label.config(font=('Arial', 14))
@@ -168,11 +168,11 @@ def addRowInTable(path, command,frame_display) :
             #button['command']=lambda btn=button:showData(btn)
             frame_display.grid_columnconfigure(column,weight=1)
         elif column == 0:
-            label=tk.Label(frame_display,text=path,bg="black",fg="white",padx=3,pady=3)
+            label=tk.Label(frame_display,text=command,bg="black",fg="white",padx=3,pady=3)
             label.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
             frame_display.grid_columnconfigure(column,weight=1)
         elif column == 1:
-            label=tk.Label(frame_display,text=command,bg="black",fg="white",padx=3,pady=3)
+            label=tk.Label(frame_display,text=path,bg="black",fg="white",padx=3,pady=3)
             label.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
             frame_display.grid_columnconfigure(column,weight=1)
         elif column == 3:

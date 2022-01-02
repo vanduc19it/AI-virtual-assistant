@@ -11,10 +11,21 @@ from tensorflow.keras.models import load_model
 
 import constants 
 import handleFile
+import addCommand
 
 lemartizer = WordNetLemmatizer()
 str_intents = handleFile.readFile(constants.URL_File + 'intents.json')  
 intents = json.loads(str_intents)
+
+
+dic_commands = addCommand.getCommandDic()
+for x in dic_commands:
+    intents['intents'].append(
+        {"tag": x,
+            "patterns": [x],
+            "responses": [x],
+        "context_set": ""
+    },)
 
 words = pickle.load(open( constants.URL_File +'words.pkl', 'rb'))
 classes = pickle.load(open( constants.URL_File +'classes.pkl', 'rb'))
@@ -54,7 +65,7 @@ def predict_class(sentence):
 def get_response(ints, intents_json):
     try:
         tag = ints[0]['intent']
-        #print(ints)
+        #print(tag)
         list_of_intents = intents_json['intents']
         for i in list_of_intents:
             if i['tag'] == tag:
