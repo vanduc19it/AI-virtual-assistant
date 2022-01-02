@@ -14,11 +14,29 @@ from tensorflow.keras.optimizers import SGD
 
 import constants 
 import handleFile
+import addCommand
+
+
+
+
+
 def trainbot():
     lemmatizer = WordNetLemmatizer()
     str_intents = handleFile.readFile(constants.URL_File +'intents.json')  
     intents = json.loads(str_intents) #đọc dữ liệu tròn file json
-    
+
+    dic_commands = addCommand.getCommandDic()
+    for x in dic_commands:
+        intents['intents'].append(
+            {"tag": x,
+            "patterns": [x],
+            "responses": [x],
+            "context_set": ""
+        },)
+  
+    #print(intents)
+
+
     words = []
     classes = []
     documents = []

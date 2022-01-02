@@ -27,6 +27,7 @@ import roman
 from PIL import Image
 from tkinter import messagebox
 from tkinter import simpledialog
+import time
 
 import threading
 
@@ -52,6 +53,8 @@ var = StringVar()
 var1 = StringVar()
 
 current_username = StringVar()
+
+wikipedia.set_lang("vi")
 
 def speak(audio):
     config_voice.speak(audio)
@@ -246,6 +249,7 @@ def openWeb(nameWeb,url):
     webbrowser.open(url)
 
 def openFile( path):
+    #print(path)
     try:
         var.set("Đang mở ")
         window.update()
@@ -389,8 +393,8 @@ def take_of_photo():
     stream = cv2.VideoCapture(0)
     grabbed, frame = stream.read()
     if grabbed:
-        cv2.imshow( constants.URL_IMAGE + 'pic', frame)
-        cv2.imwrite( constants.URL_IMAGE + 'pic.jpg',frame)
+        cv2.imshow( constants.URL_IMAGE + format(time.time()) + 'pic', frame)
+        cv2.imwrite( constants.URL_IMAGE + format(time.time()) + 'pic.jpg',frame)
     stream.release()
 
 def take_of_video():
@@ -481,13 +485,11 @@ data_function = {
     #"watch_youtube": watch_youtube
 }
 
-
 def handleTask(window):
-
     while True:
         btn1.configure(bg = 'orange')
         query = takeCommand().lower()
-        if query == None or query == "none": 
+        if query == None or query == "none" or query == "": 
             print("ko xác định") 
             continue
 
@@ -504,20 +506,18 @@ def handleTask(window):
                     stop_bye()
                     break
                 try:
-                    data_function[res]()
+                    try:
+                        data_function[res]()
+                    except:
+                        print("ahihi")
+                        dic_commands = addCommand.getCommandDic()
+                        openFile(dic_commands[res])
                 except:
                     speak(res)
+                    
                 window.update() 
             else:
-                dic_commands = addCommand.getCommandDic()
-                for x in dic_commands:
-                    if dic_commands[x]  in query:
-                        try:
-                            print("mở file")
-                            openFile(x) 
-                        except:
-                            pass
-                        continue
+                print("bot ko hiểu")
 
         print("Hết một vòng lặp!")
 
