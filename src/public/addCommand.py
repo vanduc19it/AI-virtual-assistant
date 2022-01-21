@@ -6,7 +6,6 @@ from tkinter import Frame, Label, StringVar, messagebox
 import constants
 import handleData
 import config_voice
-import tranning
 
 url_command  = constants.URL_File + "command.json"
 
