@@ -1,9 +1,8 @@
-import json 
+
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
 from tkinter import Frame, Label, StringVar, messagebox
 
-import handleFile
 import constants
 import handleData
 import config_voice
@@ -14,7 +13,7 @@ row_current = 1
 
 global var_label_voice 
 global frame
-
+global frame_display
 
 def updateUi( s = "hhi"):
  
@@ -70,17 +69,25 @@ def handle_btnAddCommand(entry_file, entry_command, frame):
     print(str_cmd)
     print(str_file)
     if str_cmd == "" or str_file == "":
-        return messagebox.showerror( title="ERROR", message= 'type enough infor ,please !!')
+        return messagebox.showerror( title="ERROR", message= 'Bạn cần nhập đầy đủ thông tin ,please !!')
 
     addCommand(str_file, str_cmd,frame)
 
 
+def delete_command(item):
+    def wrapper(item_delete=item):
+        handleData.deleteData(item_delete, url_command)
+        #return format(x)+format(y)
+        global frame_display
+        frame_display.update()
+        return messagebox.showerror( title="Warrning", message= 'Bạn cần khởi động lại chương trình đề hoàn thành tác vụ !!')
+    return wrapper
 
 
 def createGui():
    
     root = tk.Tk()
-    global var_label_voice
+    global var_label_voice  
     var_label_voice = StringVar()
     root.geometry("500x450")
     root.title("Add Command")
@@ -112,12 +119,13 @@ def createGui():
     frame.pack()
     btn_addCommand.pack()
     
+    global frame_display
     frame_display = Frame(root)
 
     
     commands = getCommandDic()
 
-    for column in range(4):
+    for column in range(3):
         text_heading = ""
         if column  == 0:
             text_heading = "command"
@@ -131,13 +139,9 @@ def createGui():
 
     global row_current
     for row in commands:
-        for column in range(4):
-            if column == 2:
-                button=tk.Button(frame_display,text="Edit",bg="blue",fg="white",padx=3,pady=3)
-                button.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
-                #button['command']=lambda btn=button:showData(btn)
-                frame_display.grid_columnconfigure(column,weight=1)
-            elif column == 0:
+       
+        for column in range(3):
+            if column == 0:
                 label=tk.Label(frame_display,text=row,bg="black",fg="white",padx=3,pady=3)
                 label.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
                 frame_display.grid_columnconfigure(column,weight=1)
@@ -145,13 +149,13 @@ def createGui():
                 label=tk.Label(frame_display,text=commands[row],bg="black",fg="white",padx=3,pady=3)
                 label.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
                 frame_display.grid_columnconfigure(column,weight=1)
-            elif column == 3:
-                button=tk.Button(frame_display,text="Delete",bg="blue",fg="white",padx=3,pady=3)
+            elif column == 2:
+                button=tk.Button(frame_display,text="Delete",bg="blue",fg="white",padx=3,pady=3, command=delete_command(row))
                 button.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
                 #button['command']=lambda btn=button:showData(btn)
                 frame_display.grid_columnconfigure(column,weight=1)
         row_current = row_current + 1
-        print(row_current)
+        #print(row_current)
 
   
     frame_display.pack()
@@ -159,15 +163,12 @@ def createGui():
     root.mainloop()
 
 
+
+
 def addRowInTable(path, command,frame_display) :
     global row_current
-    for column in range(4):
-        if column == 2:
-            button=tk.Button(frame_display,text="Edit",bg="blue",fg="white",padx=3,pady=3)
-            button.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
-            #button['command']=lambda btn=button:showData(btn)
-            frame_display.grid_columnconfigure(column,weight=1)
-        elif column == 0:
+    for column in range(3):
+        if column == 0:
             label=tk.Label(frame_display,text=command,bg="black",fg="white",padx=3,pady=3)
             label.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
             frame_display.grid_columnconfigure(column,weight=1)
@@ -175,7 +176,7 @@ def addRowInTable(path, command,frame_display) :
             label=tk.Label(frame_display,text=path,bg="black",fg="white",padx=3,pady=3)
             label.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
             frame_display.grid_columnconfigure(column,weight=1)
-        elif column == 3:
+        elif column == 2:
             button=tk.Button(frame_display,text="Delete",bg="blue",fg="white",padx=3,pady=3)
             button.grid(row=row_current,column=column,sticky="nsew",padx=1,pady=1)
             #button['command']=lambda btn=button:showData(btn)

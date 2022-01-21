@@ -79,7 +79,7 @@ def get_response(ints, intents_json):
 # while True:
 #     message = input("")
 #     ints = predict_class(message)
-#     print(ints)
+#     ##print(ints)
 #     res = get_response(ints, intents)
 #     print(res)
 

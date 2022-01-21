@@ -18,6 +18,17 @@ def addData(content, url_file):
     except:
         return "error"
 
+def deleteData(item_delete, url_file):
+    try:
+        str = handleFile.readFile(url_file)    
+        contents = json.loads(str)
+        
+        contents.pop(item_delete)
+        content_data = json.dumps(contents,ensure_ascii=False)
+        handleFile.wirteFile(url_file, content_data)
+        return "success"
+    except:
+        return "error"
 
 def getData(url_file):
     str = handleFile.readFile(url_file)

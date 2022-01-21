@@ -23,8 +23,7 @@ import addCommand
 def trainbot():
     lemmatizer = WordNetLemmatizer()
     str_intents = handleFile.readFile(constants.URL_File +'intents.json')  
-    intents = json.loads(str_intents) #đọc dữ liệu tròn file json
-
+    intents = json.loads(str_intents) 
     dic_commands = addCommand.getCommandDic()
     for x in dic_commands:
         intents['intents'].append(
@@ -37,28 +36,29 @@ def trainbot():
     #print(intents)
 
 
-    words = []
-    classes = []
-    documents = []
+    words = [] # các từ mình yêu cầu
+    classes = [] # các nhãn tag 
+    documents = [] # mảng các yêu cầu và nhãn 
     ignore_letters = ['?','!','.',',']
 
     for intent in intents['intents']:
         for pattern in intent['patterns']:
-            word_list = nltk.word_tokenize(pattern)
-            words.extend(word_list)
-            documents.append((word_list, intent['tag']))
+            word_list = nltk.word_tokenize(pattern) # trả về mảng các từ và dấu câu ví dụ " xin chào . " trả về ["xin", "chao", "."]
+            words.extend(word_list)  #thêm word_list vào words # thêm nhiều cái
+            documents.append((word_list, intent['tag'])) # thêm một cái 
             if intent['tag'] not in classes:
                 classes.append(intent['tag'])
-                
-    words = [lemmatizer.lemmatize(word) for word in words if word not in ignore_letters]
-    words = sorted(set(words)) 
+
+    #print(documents)       
+    words = [lemmatizer.lemmatize(word) for word in words if word not in ignore_letters] # xử tiền dữ liệu ví dụ đưa số nhiều về số ít, ..
+    words = sorted(set(words)) # sắp xếp theo thứ tự tăng dần: số , chữ hoa , chữ thường
     classes = sorted(set(classes))
     pickle.dump(words, open( constants.URL_File +'words.pkl', 'wb'))  
     pickle.dump(classes, open( constants.URL_File +'classes.pkl', 'wb'))
 
     training = []
-    output_empty = [0]*len(classes)
-
+    output_empty = [0]*len(classes) # tạo mảng với độ rộng là số lượng các nhãn
+    print(output_empty)
     for document in documents:
         bag = []
         word_patterns = document[0]

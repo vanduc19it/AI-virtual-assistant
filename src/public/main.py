@@ -365,9 +365,9 @@ def change_name():
 
 def calculation():
     sum = 0
-    var.set('Yes Sir, please tell the numbers')
+    var.set('làm ơn nói phép tính')
     window.update()
-    speak('Yes Sir, please tell the numbers')
+    speak('làm ơn nói phép tính')
     while True:
         query = takeCommand()
         if 'answer' in query:
