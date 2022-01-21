@@ -92,11 +92,11 @@ def send_email():
 def wishme(window):  
     hour = int(datetime.datetime.now().hour)
     if hour >= 0 and hour <= 12:
-        var.set("Good morning sir !") 
+        var.set("Chào buổi sáng !") 
         window.update()
         speak("Chào buổi sáng bạn " + current_username.get() +". Chúc bạn một ngày tốt lành !")
     elif hour >= 12 and hour <= 18:
-        var.set("Good afternoon sir !")
+        var.set("Chào buổi chiều sir !")
         window.update()
         speak("Chào buổi chiều bạn " + current_username.get() +". Bạn đã dự định gì cho chiều nay chưa !")
     else:
@@ -365,15 +365,15 @@ def change_name():
 
 def calculation():
     sum = 0
-    var.set('Yes Sir, please tell the numbers')
+    var.set('Làm ơn nói phép tính')
     window.update()
-    speak('Yes Sir, please tell the numbers')
+    speak('Làm ơn nói phép tính')
     while True:
         query = takeCommand()
         if 'answer' in query:
-            var.set('here is result'+str(sum))
+            var.set('Đây là kết quả'+str(sum))
             window.update()
-            speak('here is result'+str(sum))
+            speak('Đây là kết quả'+str(sum))
             break
         elif query:
             if query == 'x**':
