@@ -61,18 +61,18 @@ def trainbot():
     print(output_empty)
     for document in documents:
         bag = []
-        word_patterns = document[0]
+        word_patterns = document[0] # document[0] là các đầu vào yêu cầu người dùng, document[1] là các nhãn dãn
         word_patterns = [lemmatizer.lemmatize(word.lower()) for word in word_patterns]
         for word in words:
             bag.append(1) if word in word_patterns else bag.append(0)
             
         output_row = list(output_empty)
-        output_row[classes.index(document[1])] = 1
+        output_row[classes.index(document[1])] = 1 
         training.append([bag, output_row])
                 
                 
-    random.shuffle(training)
-    training = np.array(training)
+    random.shuffle(training) # xáo trộn mảng
+    training = np.array(training) # tạo mảng
 
     train_x = list(training[:, 0])
     train_y = list(training[:, 1]) 
