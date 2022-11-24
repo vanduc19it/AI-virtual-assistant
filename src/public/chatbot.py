@@ -36,8 +36,32 @@ model = load_model( constants.URL_File + 'chatbotmodel.h5')
 # print(intents)
 # print(model)
 
+URL_STOPWORDS_VI = "src/public/datas3_stopword_vi.txt"
+
+def load_dataStopWord(txt_file):
+    texts = []
+    with open(txt_file, 'r', encoding='utf8') as fp:
+        for line in fp.readlines():
+            texts.append(line.strip())
+    return texts
+
+def func_stop_words(data2):
+    stop_words = load_dataStopWord(URL_STOPWORDS_VI)
+
+    word_tokens = nltk.word_tokenize(data2) 
+    
+    filtered_sentence = [w for w in word_tokens if not w in stop_words] 
+    
+    filtered_sentence = [] 
+    
+    for w in word_tokens: 
+        if w not in stop_words: 
+            filtered_sentence.append(w) 
+    
+    return(filtered_sentence) 
+
 def clean_up_sentence(sentence):
-    sentence_words = nltk.word_tokenize(sentence)
+    sentence_words = func_stop_words(sentence)
     sentence_words = [lemartizer.lemmatize(word) for word in sentence_words]
     return sentence_words
 
