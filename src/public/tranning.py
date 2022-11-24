@@ -3,6 +3,7 @@ import json
 import pickle
 from nltk import metrics
 import numpy as np
+from underthesea import word_tokenize
 
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -18,7 +19,29 @@ import addCommand
 
 
 
+URL_STOPWORDS_VI = "src/public/datas3_stopword_vi.txt"
 
+def load_dataStopWord(txt_file):
+    texts = []
+    with open(txt_file, 'r', encoding='utf8') as fp:
+        for line in fp.readlines():
+            texts.append(line.strip())
+    return texts
+
+def func_stop_words(data2):
+    stop_words = load_dataStopWord(URL_STOPWORDS_VI)
+
+    word_tokens = nltk.word_tokenize(data2) 
+    
+    filtered_sentence = [w for w in word_tokens if not w in stop_words] 
+    
+    filtered_sentence = [] 
+    
+    for w in word_tokens: 
+        if w not in stop_words: 
+            filtered_sentence.append(w) 
+    
+    return(filtered_sentence) 
 
 def trainbot():
     lemmatizer = WordNetLemmatizer()
@@ -44,12 +67,13 @@ def trainbot():
 
     for intent in intents['intents']:
         for pattern in intent['patterns']:
-            word_list = nltk.word_tokenize(pattern)
+            word_list = func_stop_words(pattern)
             words.extend(word_list)
+           
             documents.append((word_list, intent['tag']))
             if intent['tag'] not in classes:
                 classes.append(intent['tag'])
-                
+            
     words = [lemmatizer.lemmatize(word) for word in words if word not in ignore_letters]
     words = sorted(set(words)) 
     classes = sorted(set(classes))
